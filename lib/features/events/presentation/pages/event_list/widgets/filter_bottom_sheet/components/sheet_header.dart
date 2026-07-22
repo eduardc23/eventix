@@ -1,0 +1,34 @@
+import 'package:app_ui_kit/app_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../../constants/events_strings.dart';
+import '../../../providers/filters/event_filters_providers.dart';
+
+class SheetHeader extends ConsumerWidget {
+  const SheetHeader({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const Center(
+          child: AppText(
+            EventsStrings.filterTitle,
+            variant: AppTextVariant.titleMedium,
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: AppTextButton(
+            label: EventsStrings.resetFilters,
+            variant: AppTextVariant.labelMedium,
+            onPressed: () =>
+                ref.read(draftEventFiltersProvider.notifier).reset(),
+          ),
+        ),
+      ],
+    );
+  }
+}

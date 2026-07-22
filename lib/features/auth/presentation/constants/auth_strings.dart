@@ -1,0 +1,38 @@
+class AuthStrings {
+  AuthStrings._();
+
+  // Títulos y Subtítulos
+  static const String loginTitle = 'Iniciar sesión';
+  static const String loginSubtitle = 'Inicia sesión para gestionar tus eventos y entradas.';
+  static const String registerTitle = 'Registro';
+  static const String registerSubtitle = 'Crea una cuenta para empezar a organizar tus eventos.';
+
+  // Botones y Enlaces
+  static const String loginButton = 'Iniciar sesión';
+  static const String registerButton = 'Registrarse';
+  static const String noAccountText = '¿No tienes cuenta? ';
+  static const String registerLink = 'Regístrate';
+  static const String registerHereLink = '¿No tienes cuenta? Regístrate aquí';
+  static const String alreadyHaveAccountText = '¿Ya tienes cuenta? ';
+  static const String loginLink = 'Inicia sesión';
+
+  // Etiquetas de campos
+  static const String usernameLabel = 'Nombre de usuario';
+  static const String confirmPasswordLabel = 'Confirmar Contraseña';
+
+  // Errores de Validación
+  static const String usernameRequired = 'Ingresa tu nombre de usuario.';
+  static const String usernameMinLength = 'Mínimo 3 caracteres.';
+  static const String emailRequired = 'Ingresa tu correo.';
+  static const String invalidEmail = 'Correo no válido.';
+  static const String passwordRequired = 'Ingresa tu contraseña.';
+  static const String passwordMinLength = 'Mínimo 6 caracteres.';
+  static const String confirmPasswordRequired = 'Confirma tu contraseña.';
+  static const String passwordsDoNotMatch = 'Las contraseñas no coinciden.';
+
+  // Errores de Autenticación (Firebase/Backend)
+  static const String invalidAuthError = 'Correo o contraseña incorrectos. Intenta de nuevo.';
+  static const String emailAlreadyInUseError = 'Este correo ya está registrado.';
+  static const String tooManyRequestsError = 'Demasiados intentos fallidos. Espera un momento.';
+  static const String unexpectedAuthError = 'Error inesperado durante la autenticación.';
+}
