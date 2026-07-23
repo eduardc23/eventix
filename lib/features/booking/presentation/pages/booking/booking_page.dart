@@ -1,4 +1,5 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
+import 'package:eventix/features/booking/presentation/pages/booking_list/providers/booking_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,15 +34,13 @@ class BookingPage extends ConsumerWidget {
         isFree: event.isFree,
         eventTitle: event.title,
         totalPrice: totalPrice,
-        onOkPressed: () {
-          context.pop();
+        onOkPressed: () async {
           ref.invalidate(eventsProvider);
-          // 1. Resetea el stack del tab de eventos a su raíz
-          context.go(AppRoutes.events);
-          // 2. Luego navega al tab de bookings
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.go(AppRoutes.bookings);
-          });
+          ref.invalidate(bookingListProvider);
+          context.pop();
+          final router = GoRouter.of(context);
+          await Future.delayed(AppDurations.medium);
+          router.go(AppRoutes.bookings);
         },
       ),
     );

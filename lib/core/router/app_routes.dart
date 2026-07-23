@@ -5,17 +5,20 @@ abstract class AppRoutes {
 
   // Shell y tabs base
   static const shell = '/home';
-  
-  // Segmentos relativos (usados en la definición de sub-rutas de GoRouter)
+
+  // Segmentos relativos — dentro del shell
   static const eventsPath = 'events';
   static const bookingsPath = 'bookings';
+
+  // Segmentos relativos — fuera del shell
   static const eventDetailPath = 'detail';
   static const eventBookingPath = 'booking';
 
-  // Rutas completas (usadas para navegación: context.go, context.push)
+  // Rutas completas dentro del shell
   static const events = '$shell/$eventsPath';
   static const bookings = '$shell/$bookingsPath';
-  
-  static const eventDetail = '$events/$eventDetailPath';
-  static const eventBooking = '$eventDetail/$eventBookingPath';
+
+  // Rutas completas fuera del shell (nivel raíz)
+  static const eventDetail = '/detail';
+  static const eventBooking = '/detail/$eventBookingPath';
 }

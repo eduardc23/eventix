@@ -21,7 +21,7 @@ class EventListItem extends StatelessWidget {
         price: event.price.toInt().toString(),
         isFree: event.isFree,
       ),
-      onTap: () => context.go(AppRoutes.eventDetail, extra: event),
+      onTap: () => context.push(AppRoutes.eventDetail, extra: event),
     );
   }
 }

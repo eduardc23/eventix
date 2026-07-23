@@ -78,47 +78,19 @@ GoRouter appRouter(Ref ref) {
       ),
 
       /// Shell con navegación por tabs. Mantiene el estado de cada rama
-      /// gracias a [StatefulShellRoute.indexedStack].
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             MainShell(navigationShell: navigationShell),
         branches: [
-          /// Rama 1 — Eventos.
-          ///
-          /// Árbol de rutas:
-          ///   /events
-          ///   /events/detail
-          ///   /events/detail/booking
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: AppRoutes.events,
                 builder: (_, _) => const EventListPage(),
-                routes: [
-                  GoRoute(
-                    path: AppRoutes.eventDetailPath,
-                    // Recibe un [EventEntity] por `state.extra`.
-                    builder: (_, state) {
-                      final event = state.extra as EventEntity;
-                      return EventDetailPage(event: event);
-                    },
-                    routes: [
-                      GoRoute(
-                        path: AppRoutes.eventBookingPath,
-                        // Recibe un [EventEntity] por `state.extra`.
-                        builder: (_, state) {
-                          final event = state.extra as EventEntity;
-                          return BookingPage(event: event);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                // Sin rutas anidadas aquí
               ),
             ],
           ),
-
-          /// Rama 2 — Reservas del usuario.
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -126,6 +98,23 @@ GoRouter appRouter(Ref ref) {
                 builder: (_, _) => const BookingListPage(),
               ),
             ],
+          ),
+        ],
+      ),
+
+      GoRoute(
+        path: AppRoutes.eventDetail,
+        builder: (_, state) {
+          final event = state.extra as EventEntity;
+          return EventDetailPage(event: event);
+        },
+        routes: [
+          GoRoute(
+            path: AppRoutes.eventBookingPath,
+            builder: (_, state) {
+              final event = state.extra as EventEntity;
+              return BookingPage(event: event);
+            },
           ),
         ],
       ),

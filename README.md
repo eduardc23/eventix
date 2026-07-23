@@ -133,9 +133,9 @@ La navegación se implementa con Go Router y un shell de navegación por tabs.
 - `/login`: Login.
 - `/register`: Registro.
 - `/home/events`: listado de eventos.
-- `/home/events/detail`: detalle del evento.
-- `/home/events/detail/booking`: pantalla de reserva.
 - `/home/bookings`: listado de reservas.
+- `/detail`: detalle del evento.
+- `/detail/booking`: pantalla de reserva.
 
 ### Comportamiento destacado
 
@@ -143,6 +143,7 @@ La navegación se implementa con Go Router y un shell de navegación por tabs.
 - Si el usuario no está autenticado, se fuerza la navegación a login.
 - Si está autenticado, se dirige a la rama principal de eventos.
 - Se usa `StatefulShellRoute.indexedStack` para mantener el estado de las ramas de navegación.
+- Las pantallas de detalle y reserva se encuentran fuera del Shell para ofrecer una experiencia de pantalla completa.
 
 ```mermaid
 flowchart TD
@@ -152,7 +153,7 @@ flowchart TD
     C --> D
     D --> E[Tab: Eventos]
     D --> F[Tab: Mis Reservas]
-    E --> G[Event Detail]
+    E -.-> G[Event Detail]
     G --> H[Booking / Confirmación]
 ```
 

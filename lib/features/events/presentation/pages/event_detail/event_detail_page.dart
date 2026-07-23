@@ -61,7 +61,7 @@ class EventDetailPage extends StatelessWidget {
         action: event.bookingAction,
         onPressed: event.isBookable
             ? () {
-                context.go(AppRoutes.eventBooking, extra: event);
+                context.push(AppRoutes.eventBooking, extra: event);
               }
             : null,
       ),
