@@ -2,7 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../../../core/presentation/utils/async_value_extensions.dart';
+import '../../../../../../../core/presentation/extensions/async_value_extensions.dart';
 import '../../providers/list/events_notifier.dart';
 import 'widgets/event_list.dart';
 import 'widgets/event_list_empty.dart';

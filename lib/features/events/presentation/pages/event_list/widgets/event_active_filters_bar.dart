@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/events_strings.dart';
-import '../../../extensions/date_filter.dart';
+import '../../../extensions/date_filter_extensions.dart';
 import '../providers/filters/event_filters_providers.dart';
 
 class EventActiveFiltersBar extends ConsumerWidget {

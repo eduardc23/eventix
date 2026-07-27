@@ -1,7 +1,7 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/constants/app_constants.dart';
 import '../../constants/main_shell_strings.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
           const DrawerHeader(
             child: Center(
               child: AppText(
-                AppStrings.appName,
+                AppConstants.appName,
                 variant: AppTextVariant.headlineSmall,
               ),
             ),

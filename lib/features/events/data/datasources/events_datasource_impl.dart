@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/data/mappers/firebase_exception_mapper.dart';
-import '../../../../core/data/utils/datasource_executor.dart';
+import '../../../../core/data/utils/datasource_executor_utils.dart';
 import '../constants/events_firestore_constants.dart';
 import '../models/category_model.dart';
 import '../models/city_model.dart';

@@ -2,7 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../domain/filters/event_filter.dart';
-import '../../../../../../extensions/date_filter.dart';
+import '../../../../../../extensions/date_filter_extensions.dart';
 
 class DateRangeSection extends StatelessWidget {
   const DateRangeSection({

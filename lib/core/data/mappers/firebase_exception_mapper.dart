@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 
-import '../../constants/firebase_common_codes.dart';
+import '../../constants/firebase_codes_constants.dart';
 import '../exceptions/core_exceptions.dart';
 
 /// Contrato para mapear excepciones genéricas de Firebase y de plataforma
@@ -29,11 +29,11 @@ class FirebaseExceptionMapperImpl implements FirebaseExceptionMapper {
   @override
   CoreException mapFirebase(FirebaseException exception) {
     return switch (exception.code) {
-      FirebaseCommonCodes.tooManyRequests => const RateLimitException(),
-      FirebaseCommonCodes.networkRequestFailed ||
-      FirebaseCommonCodes.unavailable =>
+      FirebaseCodesConstants.tooManyRequests => const RateLimitException(),
+      FirebaseCodesConstants.networkRequestFailed ||
+      FirebaseCodesConstants.unavailable =>
         const NetworkException(),
-      FirebaseCommonCodes.deadlineExceeded => const RequestTimeoutException(),
+      FirebaseCodesConstants.deadlineExceeded => const RequestTimeoutException(),
       // Código no reconocido: se trata como error de servidor y se
       // propaga el mensaje original
       _ => ServerException(message: exception.message),

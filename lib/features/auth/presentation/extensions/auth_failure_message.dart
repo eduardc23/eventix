@@ -1,6 +1,6 @@
 import '../../../../core/domain/failures/app_failure.dart';
 import '../../../../core/domain/failures/core_failures.dart';
-import '../../../../core/presentation/utils/core_failure_message.dart';
+import '../../../../core/presentation/extensions/core_failure_message.dart';
 import '../../domain/failures/auth_failure.dart';
 import '../constants/auth_strings.dart';
 

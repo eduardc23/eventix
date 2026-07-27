@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/data/mappers/firebase_exception_mapper.dart';
-import '../../../../core/data/utils/datasource_executor.dart';
+import '../../../../core/data/utils/datasource_executor_utils.dart';
 import '../exceptions/auth_exception.dart';
 import '../mappers/firebase_auth_exception_mapper.dart';
 import 'auth_datasource.dart';

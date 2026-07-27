@@ -1,4 +1,4 @@
-import '../constants/app_strings.dart';
+import '../constants/app_constants.dart';
 
 /// Reglas de validación primitivas, puras y reutilizables.
 class Validators {
@@ -18,7 +18,7 @@ class Validators {
 
   static String? required(
     String? value, {
-    String message = AppStrings.requiredField,
+    String message = AppConstants.requiredField,
   }) {
     if (value == null || value.trim().isEmpty) return message;
     return null;
@@ -26,14 +26,14 @@ class Validators {
 
   static String? minLength(String? value, int min, {String? message}) {
     if (value != null && value.trim().length < min) {
-      return message ?? AppStrings.minLengthError(min);
+      return message ?? AppConstants.minLengthError(min);
     }
     return null;
   }
 
   static String? maxLength(String? value, int max, {String? message}) {
     if (value != null && value.trim().length > max) {
-      return message ?? AppStrings.maxLengthError(max);
+      return message ?? AppConstants.maxLengthError(max);
     }
     return null;
   }
@@ -44,7 +44,7 @@ class Validators {
     }
     final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
     if (!regex.hasMatch(value.trim())) {
-      return message ?? AppStrings.invalidEmail;
+      return message ?? AppConstants.invalidEmail;
     }
     return null;
   }
@@ -52,7 +52,7 @@ class Validators {
   static String? pattern(
     String? value,
     RegExp regex, {
-    String message = AppStrings.invalidFormat,
+    String message = AppConstants.invalidFormat,
   }) {
     if (value == null || value.trim().isEmpty) return null;
     if (!regex.hasMatch(value.trim())) return message;

@@ -3,7 +3,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../core/presentation/utils/async_value_extensions.dart';
+import '../../../../../../core/presentation/extensions/async_value_extensions.dart';
 import '../../../constants/booking_strings.dart';
 import '../../../extensions/booking_failure_message.dart';
 import '../../../extensions/date_time_extensions.dart';
