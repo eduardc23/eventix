@@ -7,6 +7,7 @@ abstract class EventsFirestoreConstants {
   static const String citiesCollection = 'cities';
 
   // Common Fields
+  static const String uidField = 'uid';
   static const String nameField = 'name';
   static const String createdAtField = 'createdAt';
 

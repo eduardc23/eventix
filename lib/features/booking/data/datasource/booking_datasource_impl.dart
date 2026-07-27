@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/data/mappers/firebase_exception_mapper.dart';
-import '../../../../core/data/utils/datasource_executor.dart';
+import '../../../../core/data/utils/datasource_executor_utils.dart';
 import '../../../events/data/constants/events_firestore_constants.dart';
 import '../../domain/entities/create_booking_params.dart';
 import '../constants/booking_firestore_constants.dart';
@@ -20,21 +20,8 @@ class BookingDataSourceImpl with DatasourceExecutor implements BookingDataSource
   final FirebaseFirestore _firestore;
   final FirebaseExceptionMapper _firebaseMapper;
 
-  // Ref centralizado con convertidor
-  CollectionReference<BookingModel> get _bookingsCollection => _firestore
-      .collection(BookingFirestoreConstants.bookingsCollection)
-      .withConverter<BookingModel>(
-        fromFirestore: (snapshot, _) {
-          final data = snapshot.data()!;
-          data['uid'] = snapshot.id;
-          return BookingModel.fromJson(data);
-        },
-        toFirestore: (model, _) {
-          final json = model.toJson();
-          json.remove('uid');
-          return json;
-        },
-      );
+  CollectionReference<Map<String, dynamic>> get _bookingsCollection =>
+      _firestore.collection(BookingFirestoreConstants.bookingsCollection);
 
   DocumentReference<Map<String, dynamic>> _eventRef(String eventId) =>
       _firestore
@@ -49,9 +36,7 @@ class BookingDataSourceImpl with DatasourceExecutor implements BookingDataSource
         () async {
           // 1. ID compuesto en lugar de auto-generado
           final bookingId = '${params.userId}_${params.eventId}';
-          final bookingRef = _firestore
-              .collection(BookingFirestoreConstants.bookingsCollection)
-              .doc(bookingId);
+          final bookingRef = _bookingsCollection.doc(bookingId);
 
           await _firestore.runTransaction((tx) async {
             final eventSnap = await tx.get(_eventRef(params.eventId));
@@ -116,7 +101,11 @@ class BookingDataSourceImpl with DatasourceExecutor implements BookingDataSource
               )
               .get();
 
-          return snap.docs.map((doc) => doc.data()).toList();
+          return snap.docs.map((doc) {
+            final data = doc.data();
+            data[BookingFirestoreConstants.uidField] = doc.id;
+            return BookingModel.fromJson(data);
+          }).toList();
         },
         firebaseMapper: _firebaseMapper,
       );

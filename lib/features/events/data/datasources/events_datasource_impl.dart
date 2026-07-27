@@ -18,51 +18,6 @@ class EventsDatasourceImpl with DatasourceExecutor implements EventsDataSource {
   final FirebaseFirestore _firestore;
   final FirebaseExceptionMapper _firebaseMapper;
 
-  CollectionReference<EventModel> get _eventsCollection => _firestore
-      .collection(EventsFirestoreConstants.eventsCollection)
-      .withConverter<EventModel>(
-        fromFirestore: (snapshot, _) {
-          final data = snapshot.data()!;
-          data['uid'] = snapshot.id;
-          return EventModel.fromJson(data);
-        },
-        toFirestore: (model, _) {
-          final json = model.toJson();
-          json.remove('uid');
-          return json;
-        },
-      );
-
-  CollectionReference<CategoryModel> get _categoriesCollection => _firestore
-      .collection(EventsFirestoreConstants.categoriesCollection)
-      .withConverter<CategoryModel>(
-        fromFirestore: (snapshot, _) {
-          final data = snapshot.data()!;
-          data['uid'] = snapshot.id;
-          return CategoryModel.fromJson(data);
-        },
-        toFirestore: (model, _) {
-          final json = model.toJson();
-          json.remove('uid');
-          return json;
-        },
-      );
-
-  CollectionReference<CityModel> get _citiesCollection => _firestore
-      .collection(EventsFirestoreConstants.citiesCollection)
-      .withConverter<CityModel>(
-        fromFirestore: (snapshot, _) {
-          final data = snapshot.data()!;
-          data['uid'] = snapshot.id;
-          return CityModel.fromJson(data);
-        },
-        toFirestore: (model, _) {
-          final json = model.toJson();
-          json.remove('uid');
-          return json;
-        },
-      );
-
   @override
   Future<List<EventModel>> getEvents({
     String? categoryId,
@@ -72,7 +27,8 @@ class EventsDatasourceImpl with DatasourceExecutor implements EventsDataSource {
   }) =>
       execute(
         () async {
-          Query<EventModel> query = _eventsCollection;
+          Query<Map<String, dynamic>> query = _firestore
+              .collection(EventsFirestoreConstants.eventsCollection);
 
           if (categoryId != null) {
             query = query.where(
@@ -109,7 +65,11 @@ class EventsDatasourceImpl with DatasourceExecutor implements EventsDataSource {
               .orderBy(EventsFirestoreConstants.eventDateField)
               .get();
 
-          return snapshot.docs.map((doc) => doc.data()).toList();
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            data[EventsFirestoreConstants.uidField] = doc.id;
+            return EventModel.fromJson(data);
+          }).toList();
         },
         firebaseMapper: _firebaseMapper,
       );
@@ -117,23 +77,31 @@ class EventsDatasourceImpl with DatasourceExecutor implements EventsDataSource {
   @override
   Future<List<CategoryModel>> getCategories() => execute(
         () async {
-          final snapshot = await _categoriesCollection
-              .orderBy(EventsFirestoreConstants.nameField)
-              .get();
-
-          return snapshot.docs.map((doc) => doc.data()).toList();
-        },
-        firebaseMapper: _firebaseMapper,
-      );
+      final snapshot = await _firestore
+          .collection(EventsFirestoreConstants.categoriesCollection)
+          .get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data[EventsFirestoreConstants.uidField] = doc.id;
+        return CategoryModel.fromJson(data);
+      }).toList();
+    },
+    firebaseMapper: _firebaseMapper,
+  );
 
   @override
   Future<List<CityModel>> getCities() => execute(
         () async {
-          final snapshot = await _citiesCollection
+          final snapshot = await _firestore
+              .collection(EventsFirestoreConstants.citiesCollection)
               .orderBy(EventsFirestoreConstants.nameField)
               .get();
 
-          return snapshot.docs.map((doc) => doc.data()).toList();
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            data[EventsFirestoreConstants.uidField] = doc.id;
+            return CityModel.fromJson(data);
+          }).toList();
         },
         firebaseMapper: _firebaseMapper,
       );

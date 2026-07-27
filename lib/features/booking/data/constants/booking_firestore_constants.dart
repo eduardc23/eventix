@@ -5,6 +5,7 @@ abstract class BookingFirestoreConstants {
   static const String bookingsCollection = 'bookings';
 
   // Booking Fields
+  static const String uidField = 'uid';
   static const String userIdField = 'userId';
   static const String eventIdField = 'eventId';
   static const String eventTitleField = 'eventTitle';
