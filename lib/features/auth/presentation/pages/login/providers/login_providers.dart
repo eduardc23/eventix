@@ -17,8 +17,11 @@ class LoginNotifier extends _$LoginNotifier {
     final result = await ref.read(signInUseCaseProvider)(
       SignInParams(email: email, password: password),
     );
+
+    if (!ref.mounted) return;
+
     state = switch (result) {
-      Success() => const LoginState.success(),
+      Success() => const LoginState.initial(),
       Error(error: final failure) => LoginState.failure(failure: failure),
     };
   }

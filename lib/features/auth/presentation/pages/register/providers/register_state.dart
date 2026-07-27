@@ -10,7 +10,5 @@ class RegisterState with _$RegisterState {
 
   const factory RegisterState.loading() = _Loading;
 
-  const factory RegisterState.success() = _Success;
-
   const factory RegisterState.failure({required AppFailure failure}) = _Failure;
 }

@@ -22,8 +22,10 @@ class RegisterNotifier extends _$RegisterNotifier {
       SingUpParams(name: name, email: email, password: password),
     );
 
+    if (!ref.mounted) return;
+
     state = switch (authResult) {
-      Success() => const RegisterState.success(),
+      Success() => const RegisterState.initial(),
       Error(error: final failure) => RegisterState.failure(failure: failure),
     };
   }
