@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../../../../core/domain/failures/app_failure.dart';
 import '../../../../../constants/events_strings.dart';
-import '../../../../../extensions/event_failure_message.dart';
+import '../../../../../extensions/event_failure_message_extension.dart';
 import '../../../providers/list/events_notifier.dart';
 
 class EventListError extends ConsumerWidget {
