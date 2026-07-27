@@ -1,6 +1,7 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../../domain/enums/quick_date_option_enum.dart';
 import '../../../../../../../domain/filters/event_filter.dart';
 import 'date_range_section.dart';
 import 'quick_date_section.dart';

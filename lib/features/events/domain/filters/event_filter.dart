@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../enums/quick_date_option_enum.dart';
 
 part 'event_filter.freezed.dart';
 
@@ -39,42 +40,4 @@ sealed class DateFilter with _$DateFilter {
     required DateTime from,
     required DateTime to,
   }) = DateFilterRange;
-}
-
-// ─── Quick date options ───────────────────────────────────────────────────────
-
-enum QuickDateOption {
-  today,
-  thisWeek,
-  thisWeekend,
-  thisMonth;
-
-  ({DateTime start, DateTime end}) get range {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    return switch (this) {
-      QuickDateOption.today => (
-        start: today,
-        end: today.add(const Duration(days: 1)),
-      ),
-      QuickDateOption.thisWeek => (
-        start: today,
-        end: today.add(Duration(days: 7 - today.weekday)),
-      ),
-      QuickDateOption.thisWeekend => _weekendRange(today),
-      QuickDateOption.thisMonth => (
-        start: today,
-        end: DateTime(now.year, now.month + 1, 0),
-      ),
-    };
-  }
-
-  static ({DateTime start, DateTime end}) _weekendRange(DateTime today) {
-    final daysUntilSaturday = (DateTime.saturday - today.weekday) % 7;
-    final saturday = today.add(Duration(days: daysUntilSaturday));
-    return (start: saturday, end: saturday.add(const Duration(days: 2)));
-  }
-
-  DateFilter get asDateFilter => DateFilter.quick(option: this);
 }

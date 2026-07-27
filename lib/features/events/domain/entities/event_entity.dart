@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'event_status.dart';
+import '../enums/event_status_enum.dart';
 
 part 'event_entity.freezed.dart';
 

@@ -2,7 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/events_strings.dart';
-import '../../../extensions/event_ui_extensions.dart';
+import '../../../enums/event_booking_action_enum.dart';
 
 class EventDetailBottomBar extends StatelessWidget {
   final String priceLabel;

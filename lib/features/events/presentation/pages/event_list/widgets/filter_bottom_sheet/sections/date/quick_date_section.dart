@@ -1,8 +1,8 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../../domain/filters/event_filter.dart';
 import '../../../../../../extensions/date_filter.dart';
+import '../../../../../../../domain/enums/quick_date_option_enum.dart';
 import '../../components/filter_chip_group.dart';
 
 class QuickDateSection extends StatelessWidget {

@@ -1,8 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../../../domain/enums/quick_date_option_enum.dart';
 import '../../../../../domain/filters/event_filter.dart';
-
-
 
 part 'event_filters_providers.g.dart';
 

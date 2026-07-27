@@ -1,5 +1,5 @@
 import '../../domain/entities/event_entity.dart';
-import '../../domain/entities/event_status.dart';
+import '../../domain/enums/event_status_enum.dart';
 import '../models/event_model.dart';
 
 abstract interface class EventMapper {
