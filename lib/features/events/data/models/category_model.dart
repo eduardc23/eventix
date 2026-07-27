@@ -1,19 +1,25 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../constants/events_firestore_constants.dart';
 
-part 'category_model.freezed.dart';
-part 'category_model.g.dart';
+class CategoryModel {
+  final String? uid;
+  final String name;
 
-@freezed
-abstract class CategoryModel with _$CategoryModel {
-  const CategoryModel._();
+  const CategoryModel({
+    this.uid,
+    required this.name,
+  });
 
-  const factory CategoryModel({
-    String? uid,
-    @JsonKey(name: EventsFirestoreConstants.nameField)
-    required String name,
-  }) = _CategoryModel;
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      uid: json[EventsFirestoreConstants.uidField] as String?,
+      name: json[EventsFirestoreConstants.nameField] as String,
+    );
+  }
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
-      _$CategoryModelFromJson(json);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      if (uid != null) EventsFirestoreConstants.uidField: uid,
+      EventsFirestoreConstants.nameField: name,
+    };
+  }
 }

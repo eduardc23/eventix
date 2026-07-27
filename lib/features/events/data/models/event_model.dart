@@ -1,47 +1,80 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../../core/data/utils/json_converters.dart';
 import '../constants/events_firestore_constants.dart';
 
-part 'event_model.freezed.dart';
-part 'event_model.g.dart';
+class EventModel {
+  final String? uid;
+  final String title;
+  final String description;
+  final String categoryId;
+  final String categoryName;
+  final String cityId;
+  final String cityName;
+  final DateTime date;
+  final int price;
+  final int totalCapacity;
+  final int availableSpots;
+  final String imageUrl;
+  final String status;
+  final DateTime createdAt;
 
-@freezed
-abstract class EventModel with _$EventModel {
-  const EventModel._();
+  const EventModel({
+    this.uid,
+    required this.title,
+    required this.description,
+    required this.categoryId,
+    required this.categoryName,
+    required this.cityId,
+    required this.cityName,
+    required this.date,
+    required this.price,
+    required this.totalCapacity,
+    required this.availableSpots,
+    required this.imageUrl,
+    required this.status,
+    required this.createdAt,
+  });
 
-  const factory EventModel({
-    String? uid,
-    @JsonKey(name: EventsFirestoreConstants.eventTitleField)
-    required String title,
-    @JsonKey(name: EventsFirestoreConstants.eventDescriptionField)
-    required String description,
-    @JsonKey(name: EventsFirestoreConstants.eventCategoryIdField)
-    required String categoryId,
-    @JsonKey(name: EventsFirestoreConstants.eventCategoryNameField)
-    required String categoryName,
-    @JsonKey(name: EventsFirestoreConstants.eventCityIdField)
-    required String cityId,
-    @JsonKey(name: EventsFirestoreConstants.eventCityNameField)
-    required String cityName,
-    @TimestampConverter()
-    @JsonKey(name: EventsFirestoreConstants.eventDateField)
-    required DateTime date,
-    @JsonKey(name: EventsFirestoreConstants.eventPriceField)
-    required int price,
-    @JsonKey(name: EventsFirestoreConstants.eventTotalCapacityField)
-    required int totalCapacity,
-    @JsonKey(name: EventsFirestoreConstants.eventAvailableSpotsField)
-    required int availableSpots,
-    @JsonKey(name: EventsFirestoreConstants.eventImageUrlField)
-    required String imageUrl,
-    @JsonKey(name: EventsFirestoreConstants.eventStatusField)
-    required String status,
-    @TimestampConverter()
-    @JsonKey(name: EventsFirestoreConstants.createdAtField)
-    required DateTime createdAt,
-  }) = _EventModel;
+  factory EventModel.fromJson(Map<String, dynamic> json) {
+    return EventModel(
+      uid: json[EventsFirestoreConstants.uidField] as String?,
+      title: json[EventsFirestoreConstants.eventTitleField] as String,
+      description:
+          json[EventsFirestoreConstants.eventDescriptionField] as String,
+      categoryId: json[EventsFirestoreConstants.eventCategoryIdField] as String,
+      categoryName:
+          json[EventsFirestoreConstants.eventCategoryNameField] as String,
+      cityId: json[EventsFirestoreConstants.eventCityIdField] as String,
+      cityName: json[EventsFirestoreConstants.eventCityNameField] as String,
+      date: (json[EventsFirestoreConstants.eventDateField] as Timestamp)
+          .toDate(),
+      price: json[EventsFirestoreConstants.eventPriceField] as int,
+      totalCapacity:
+          json[EventsFirestoreConstants.eventTotalCapacityField] as int,
+      availableSpots:
+          json[EventsFirestoreConstants.eventAvailableSpotsField] as int,
+      imageUrl: json[EventsFirestoreConstants.eventImageUrlField] as String,
+      status: json[EventsFirestoreConstants.eventStatusField] as String,
+      createdAt: (json[EventsFirestoreConstants.createdAtField] as Timestamp)
+          .toDate(),
+    );
+  }
 
-  factory EventModel.fromJson(Map<String, dynamic> json) =>
-      _$EventModelFromJson(json);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      if (uid != null) EventsFirestoreConstants.uidField: uid,
+      EventsFirestoreConstants.eventTitleField: title,
+      EventsFirestoreConstants.eventDescriptionField: description,
+      EventsFirestoreConstants.eventCategoryIdField: categoryId,
+      EventsFirestoreConstants.eventCategoryNameField: categoryName,
+      EventsFirestoreConstants.eventCityIdField: cityId,
+      EventsFirestoreConstants.eventCityNameField: cityName,
+      EventsFirestoreConstants.eventDateField: Timestamp.fromDate(date),
+      EventsFirestoreConstants.eventPriceField: price,
+      EventsFirestoreConstants.eventTotalCapacityField: totalCapacity,
+      EventsFirestoreConstants.eventAvailableSpotsField: availableSpots,
+      EventsFirestoreConstants.eventImageUrlField: imageUrl,
+      EventsFirestoreConstants.eventStatusField: status,
+      EventsFirestoreConstants.createdAtField: Timestamp.fromDate(createdAt),
+    };
+  }
 }

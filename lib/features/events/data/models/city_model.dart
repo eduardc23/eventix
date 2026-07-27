@@ -1,21 +1,25 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../constants/events_firestore_constants.dart';
 
-part 'city_model.freezed.dart';
-part 'city_model.g.dart';
+class CityModel {
+  final String? uid;
+  final String name;
+  final String department;
 
-@freezed
-abstract class CityModel with _$CityModel {
-  const CityModel._();
+  const CityModel({this.uid, required this.name, required this.department});
 
-  const factory CityModel({
-    String? uid,
-    @JsonKey(name: EventsFirestoreConstants.nameField)
-    required String name,
-    @JsonKey(name: EventsFirestoreConstants.cityDepartmentField)
-    required String department,
-  }) = _CityModel;
+  factory CityModel.fromJson(Map<String, dynamic> json) {
+    return CityModel(
+      uid: json[EventsFirestoreConstants.uidField] as String?,
+      name: json[EventsFirestoreConstants.nameField] as String,
+      department: json[EventsFirestoreConstants.cityDepartmentField] as String,
+    );
+  }
 
-  factory CityModel.fromJson(Map<String, dynamic> json) =>
-      _$CityModelFromJson(json);
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      if (uid != null) EventsFirestoreConstants.uidField: uid,
+      EventsFirestoreConstants.nameField: name,
+      EventsFirestoreConstants.cityDepartmentField: department,
+    };
+  }
 }
