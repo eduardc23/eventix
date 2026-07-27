@@ -1,6 +1,7 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../constants/auth_strings.dart';
+import '../../../models/register_form_data.dart';
 import '../../../validators/auth_validators.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -21,16 +22,17 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  final _usernameFocus = FocusNode();
-  final _emailFocus = FocusNode();
-  final _passwordFocus = FocusNode();
-  final _confirmPasswordFocus = FocusNode();
+  final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _confirmPasswordFocus = FocusNode();
 
   @override
   void dispose() {
@@ -97,10 +99,8 @@ class _RegisterFormState extends State<RegisterForm> {
             textInputAction: TextInputAction.done,
             enabled: !widget.isLoading,
             onSubmitted: (_) => _handleSubmit(),
-            validator: (value) => AuthValidators.confirmPassword(
-              value,
-              _passwordController.text,
-            ),
+            validator: (value) =>
+                AuthValidators.confirmPassword(value, _passwordController.text),
           ),
           AppSpacing.xl.vGap,
           AppButton.primary(
@@ -112,17 +112,4 @@ class _RegisterFormState extends State<RegisterForm> {
       ),
     );
   }
-}
-
-/// Modelo de datos que agrupa los valores del formulario de registro.
-class RegisterFormData {
-  const RegisterFormData({
-    required this.username,
-    required this.email,
-    required this.password,
-  });
-
-  final String username;
-  final String email;
-  final String password;
 }
