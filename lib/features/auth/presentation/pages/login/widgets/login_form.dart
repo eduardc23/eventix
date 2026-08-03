@@ -3,6 +3,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/auth_strings.dart';
+import '../../../constants/auth_test_keys.dart';
 import '../../../validators/auth_validators.dart';
 
 class LoginForm extends StatefulWidget {
@@ -50,6 +51,7 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           EmailField(
+            key: AuthTestKeys.emailField,
             controller: _emailController,
             focusNode: _emailFocus,
             textInputAction: TextInputAction.next,
@@ -58,6 +60,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           AppSpacing.md.vGap,
           PasswordField(
+            key: AuthTestKeys.passwordField,
             controller: _passwordController,
             focusNode: _passwordFocus,
             textInputAction: TextInputAction.done,
@@ -66,6 +69,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           AppSpacing.xl.vGap,
           AppButton.primary(
+            key: AuthTestKeys.loginButton,
             label: AuthStrings.loginButton,
             isLoading: widget.isLoading,
             onPressed: _handleSubmit,

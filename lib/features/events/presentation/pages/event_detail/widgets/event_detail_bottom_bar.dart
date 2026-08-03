@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/events_strings.dart';
+import '../../../constants/events_test_keys.dart';
 import '../../../enums/event_booking_action_enum.dart';
 
 class EventDetailBottomBar extends StatelessWidget {
@@ -49,6 +50,7 @@ class EventDetailBottomBar extends StatelessWidget {
               AppSpacing.xl.hGap,
               Expanded(
                 child: AppButton.primary(
+                  key: EventsTestKeys.eventDetailBookingActionButton,
                   label: action.label,
                   onPressed: onPressed,
                 ),

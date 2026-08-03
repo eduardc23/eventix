@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/booking_strings.dart';
+import '../../../constants/booking_test_keys.dart';
 
 class BookingSuccessDialog extends StatelessWidget {
   const BookingSuccessDialog({
@@ -39,6 +40,7 @@ class BookingSuccessDialog extends StatelessWidget {
       ),
       actions: [
         AppButton.primary(
+          key: BookingTestKeys.successDialogOkButton,
           label: BookingStrings.ok,
           expanded: true,
           onPressed: onOkPressed,

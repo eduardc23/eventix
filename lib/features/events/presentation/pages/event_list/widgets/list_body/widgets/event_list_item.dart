@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../../../core/router/app_routes.dart';
+import '../../../../../constants/events_test_keys.dart';
 import '../../../../../../domain/entities/event_entity.dart';
 
 class EventListItem extends StatelessWidget {
@@ -13,6 +14,7 @@ class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EventCard(
+      key: EventsTestKeys.eventListItem(event.uid),
       data: EventCardData(
         imageUrl: event.imageUrl,
         name: event.title,

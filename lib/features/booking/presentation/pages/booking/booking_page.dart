@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-
 import '../../../../../core/domain/failures/app_failure.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../../events/domain/entities/event_entity.dart';
 import '../../../../events/presentation/pages/event_list/providers/list/events_notifier.dart';
 import '../../../domain/failures/booking_failures.dart';
 import '../../constants/booking_strings.dart';
+import '../../constants/booking_test_keys.dart';
 import '../../extensions/booking_failure_message.dart';
 import 'providers/booking_checkout_providers.dart';
 import 'providers/create_booking_provider.dart';
@@ -111,6 +111,7 @@ class BookingPage extends ConsumerWidget {
               AppSpacing.xxl.vGap,
             ],
             AppButton.primary(
+              key: BookingTestKeys.confirmActionButton,
               label: event.isFree
                   ? BookingStrings.confirmBooking
                   : BookingStrings.payNow,
