@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,6 +13,7 @@ import '../../features/shell/shell.dart';
 import '../../features/splash/splash.dart';
 import '../di/core_di_providers.dart';
 import 'app_routes.dart';
+import 'auth_redirect.dart';
 
 part 'app_router.g.dart';
 
@@ -25,7 +28,7 @@ GoRouter appRouter(Ref ref) {
 
   return GoRouter(
     initialLocation: AppRoutes.splash,
-    refreshListenable: _StreamToListenable(
+    refreshListenable: StreamToListenable(
       ref.watch(firebaseAuthProvider).authStateChanges(),
     ),
 
@@ -36,27 +39,12 @@ GoRouter appRouter(Ref ref) {
     /// - Si no está autenticado y no está en una ruta de auth → [AppRoutes.login]
     /// - Si está autenticado y está en splash o auth → [AppRoutes.events]
     /// - En cualquier otro caso → sin redirección (retorna null)
-    redirect: (context, state) {
-      if (authState.isLoading || authState.hasError) {
-        return AppRoutes.splash;
-      }
-
-      final isAuthenticated = authState.value != null;
-      final location = state.matchedLocation;
-
-      final isOnSplash = location == AppRoutes.splash;
-      final isOnAuth =
-          location == AppRoutes.login || location == AppRoutes.register;
-
-      if (!isAuthenticated && !isOnAuth) return AppRoutes.login;
-
-      // Al autenticarse, mandamos al tab inicial
-      if (isAuthenticated && (isOnAuth || isOnSplash)) {
-        return AppRoutes.events;
-      }
-
-      return null;
-    },
+    redirect: (context, state) => resolveAuthRedirect(
+      isLoading: authState.isLoading,
+      hasError: authState.hasError,
+      isAuthenticated: authState.value != null,
+      location: state.matchedLocation,
+    ),
     routes: [
       /// Pantalla de splash. Punto de entrada inicial mientras se resuelve
       /// el estado de autenticación.
@@ -124,10 +112,10 @@ GoRouter appRouter(Ref ref) {
 
 /// Adapta un Stream a Listenable para que GoRouter se refresque
 /// automáticamente cuando cambia el estado de autenticación.
-class _StreamToListenable extends ChangeNotifier {
-  _StreamToListenable(Stream<dynamic> stream) {
-    notifyListeners();
-    _sub = stream.asBroadcastStream().listen((_) => notifyListeners());
+@visibleForTesting
+class StreamToListenable extends ChangeNotifier {
+  StreamToListenable(Stream<User?> stream) {
+    _sub = stream.listen((_) => notifyListeners()); // <-- Eliminamos .asBroadcastStream()
   }
 
   late final StreamSubscription _sub;
