@@ -1,6 +1,4 @@
-class AppConstants {
-  AppConstants._();
-
+abstract final class AppConstants{
   static const String appName = 'Eventix';
 
   // Errores Genéricos
