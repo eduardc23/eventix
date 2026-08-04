@@ -1,0 +1,16 @@
+{
+  "uid": "event123",
+  "title": "Rock al Parque",
+  "description": "Festival de rock",
+  "categoryId": "catRock",
+  "categoryName": "Rock",
+  "cityId": "cityBog",
+  "cityName": "Bogotá",
+  "date": "2026-12-01T00:00:00.000",
+  "price": 0,
+  "totalCapacity": 50000,
+  "availableSpots": 10000,
+  "image_url": "https://rock.com/img.png",
+  "status": "active",
+  "createdAt": "2026-11-01T00:00:00.000"
+}
