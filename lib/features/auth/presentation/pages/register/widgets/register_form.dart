@@ -1,6 +1,7 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../constants/auth_strings.dart';
+import '../../../constants/auth_test_keys.dart';
 import '../../../models/register_form_data.dart';
 import '../../../validators/auth_validators.dart';
 
@@ -66,6 +67,7 @@ class _RegisterFormState extends State<RegisterForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           UsernameField(
+            key: AuthTestKeys.registerUsernameField,
             controller: _usernameController,
             focusNode: _usernameFocus,
             textInputAction: TextInputAction.next,
@@ -75,6 +77,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           AppSpacing.md.vGap,
           EmailField(
+            key: AuthTestKeys.registerEmailField,
             controller: _emailController,
             focusNode: _emailFocus,
             textInputAction: TextInputAction.next,
@@ -84,6 +87,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           AppSpacing.md.vGap,
           PasswordField(
+            key: AuthTestKeys.registerPasswordField,
             controller: _passwordController,
             focusNode: _passwordFocus,
             textInputAction: TextInputAction.next,
@@ -93,6 +97,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           AppSpacing.md.vGap,
           PasswordField(
+            key: AuthTestKeys.registerConfirmPasswordField,
             label: AuthStrings.confirmPasswordLabel,
             controller: _confirmPasswordController,
             focusNode: _confirmPasswordFocus,
@@ -104,6 +109,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           AppSpacing.xl.vGap,
           AppButton.primary(
+            key: AuthTestKeys.registerButton,
             label: AuthStrings.registerButton,
             isLoading: widget.isLoading,
             onPressed: widget.isLoading ? null : _handleSubmit,

@@ -3,4 +3,5 @@ class IntegrationTestConstants {
 
   static const String eventTitle = 'Festival de verano';
   static const String testPassword = 'Test1234!';
+  static const String registrationUsername = 'usuario prueba';
 }
