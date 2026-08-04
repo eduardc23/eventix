@@ -11,7 +11,7 @@ class CategoryMapperImpl implements CategoryMapper {
 
   @override
   CategoryEntity toEntity(CategoryModel model) => CategoryEntity(
-        uid: model.uid ?? '',
+        uid: model.uid,
         name: model.name,
       );
 

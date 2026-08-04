@@ -19,7 +19,6 @@ class CreateBookingNotifier extends _$CreateBookingNotifier {
     // 1. Validar la sesión del usuario
     final userId = ref.read(currentUserIdProvider);
     if (userId == null) {
-      // Podrías emitir un estado de fallo aquí si lo consideras necesario
       return;
     }
 
@@ -37,7 +36,6 @@ class CreateBookingNotifier extends _$CreateBookingNotifier {
       tickets: quantity,
       totalPrice: totalPrice.toDouble(),
     );
-
     // 4. Ejecutar el caso de uso
     state = const CreateBookingState.loading();
     final result = await ref.read(createBookingUseCaseProvider)(params);

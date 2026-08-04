@@ -58,23 +58,4 @@ class EventModel {
           .toDate(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      if (uid != null) EventsFirestoreConstants.uidField: uid,
-      EventsFirestoreConstants.eventTitleField: title,
-      EventsFirestoreConstants.eventDescriptionField: description,
-      EventsFirestoreConstants.eventCategoryIdField: categoryId,
-      EventsFirestoreConstants.eventCategoryNameField: categoryName,
-      EventsFirestoreConstants.eventCityIdField: cityId,
-      EventsFirestoreConstants.eventCityNameField: cityName,
-      EventsFirestoreConstants.eventDateField: Timestamp.fromDate(date),
-      EventsFirestoreConstants.eventPriceField: price,
-      EventsFirestoreConstants.eventTotalCapacityField: totalCapacity,
-      EventsFirestoreConstants.eventAvailableSpotsField: availableSpots,
-      EventsFirestoreConstants.eventImageUrlField: imageUrl,
-      EventsFirestoreConstants.eventStatusField: status,
-      EventsFirestoreConstants.createdAtField: Timestamp.fromDate(createdAt),
-    };
-  }
 }

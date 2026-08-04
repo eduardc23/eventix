@@ -41,18 +41,4 @@ class BookingModel {
           .toDate(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      if (uid != null) BookingFirestoreConstants.uidField: uid,
-      BookingFirestoreConstants.userIdField: userId,
-      BookingFirestoreConstants.eventIdField: eventId,
-      BookingFirestoreConstants.eventTitleField: eventTitle,
-      BookingFirestoreConstants.eventImageUrlField: eventImageUrl,
-      BookingFirestoreConstants.eventDateField: Timestamp.fromDate(eventDate),
-      BookingFirestoreConstants.ticketsField: tickets,
-      BookingFirestoreConstants.totalPriceField: totalPrice,
-      BookingFirestoreConstants.createdAtField: Timestamp.fromDate(createdAt),
-    };
-  }
 }

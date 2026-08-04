@@ -86,7 +86,9 @@ class BookingDataSourceImpl with DatasourceExecutor implements BookingDataSource
           });
         },
         firebaseMapper: _firebaseMapper,
-        mapException: (e) => e is BookingException ? e : null,
+        mapException: (e) {
+          return e is BookingException ? e : null;
+        },
       );
 
   @override

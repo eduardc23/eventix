@@ -11,7 +11,7 @@ class CityMapperImpl implements CityMapper {
 
   @override
   CityEntity toEntity(CityModel model) => CityEntity(
-        uid: model.uid ?? '',
+        uid: model.uid,
         name: model.name,
         department: model.department,
       );
