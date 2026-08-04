@@ -34,13 +34,12 @@ Future<void> main() async {
   });
 
   tearDown(() async {
-    await auth.signOut();
     await resetIntegrationTestData(firestore: firestore, clearEvents: true);
 
-    final currentUser = auth.currentUser;
-    if (currentUser != null) {
-      await currentUser.delete();
-    }
+    await deleteTestUser(
+      auth: auth,
+      password: IntegrationTestConstants.testPassword,
+    );
   });
 
   testWidgets(

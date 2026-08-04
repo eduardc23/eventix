@@ -25,21 +25,23 @@ Future<void> main() async {
   late String testEmail;
 
   setUp(() async {
+    // Evita que una sesión residual de otro test altere el punto de partida.
     await auth.signOut();
     testEmail = await createAndSignInTestUser(
       auth: auth,
       prefix: 'test',
       password: IntegrationTestConstants.testPassword,
     );
+    // Este caso valida el login desde una sesión cerrada, no un arranque autenticado.
     await auth.signOut();
   });
 
   tearDown(() async {
-    await auth.signOut();
-    final currentUser = auth.currentUser;
-    if (currentUser != null) {
-      await currentUser.delete();
-    }
+    await deleteTestUser(
+      auth: auth,
+      email: testEmail,
+      password: IntegrationTestConstants.testPassword,
+    );
   });
 
   testWidgets('Redirige al listado de eventos tras iniciar sesión', (

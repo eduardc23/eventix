@@ -70,6 +70,34 @@ Future<String> createAndSignInTestUser({
   return email;
 }
 
+/// Elimina el usuario de prueba autenticado. Si no hay sesión activa, intenta
+/// recuperarla con las credenciales provistas antes de borrar la cuenta.
+Future<void> deleteTestUser({
+  required FirebaseAuth auth,
+  String? email,
+  required String password,
+}) async {
+  User? user = auth.currentUser;
+
+  if (user == null && email != null) {
+    try {
+      final credential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      user = credential.user;
+    } on FirebaseAuthException catch (error) {
+      if (error.code != 'user-not-found') rethrow;
+    }
+  }
+
+  if (user != null) {
+    await user.delete();
+  }
+
+  await auth.signOut();
+}
+
 /// Inserta un evento de prueba con datos predeterminados en Firestore.
 Future<void> seedEvent({
   required FirebaseFirestore firestore,

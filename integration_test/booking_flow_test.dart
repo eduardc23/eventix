@@ -47,21 +47,21 @@ Future<void> main() async {
   });
 
   tearDown(() async {
-    await auth.signOut();
     await resetIntegrationTestData(
       firestore: firestore,
       clearEvents: true,
       clearBookings: true,
     );
 
-    final currentUser = auth.currentUser;
-    if (currentUser != null) {
-      await currentUser.delete();
-    }
+    await deleteTestUser(
+      auth: auth,
+      password: IntegrationTestConstants.testPassword,
+    );
   });
 
-  testWidgets(
-      'hace una reserva y redirige al listado de reservas', (tester,) async {
+  testWidgets('hace una reserva y redirige al listado de reservas', (
+    tester,
+  ) async {
     final userId = auth.currentUser?.uid;
 
     await tester.pumpWidget(
