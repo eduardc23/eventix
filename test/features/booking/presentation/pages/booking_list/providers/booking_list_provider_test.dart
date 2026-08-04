@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:eventix/core/di/core_di_providers.dart';
+import 'package:eventix/core/domain/failures/app_failure.dart';
 import 'package:eventix/core/domain/result/result.dart';
 import 'package:eventix/features/booking/di/booking_di_providers.dart';
+import 'package:eventix/features/booking/domain/entities/booking_entity.dart';
 import 'package:eventix/features/booking/domain/use_cases/get_bookings_by_user_usecase.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/providers/booking_list_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -200,21 +202,48 @@ void main() {
       },
     );
 
-    test(
-      'Retorna una lista vacía si la carga principal está en proceso o contiene errores',
-      () async {
-        when(() => mockUseCase(any())).thenAnswer((_) async => Error(tFailure));
+    test('Retorna una lista vacía si la carga principal está en proceso', () {
+      final pendingResult =
+          Completer<Result<List<BookingEntity>, AppFailure>>();
 
-        final container = createContainer(
-          overrides: [
-            getBookingsByUserUseCaseProvider.overrideWithValue(mockUseCase),
-            currentUserIdProvider.overrideWithValue(tUserId),
-          ],
-        );
+      when(() => mockUseCase(any())).thenAnswer((_) => pendingResult.future);
 
-        expect(container.read(upcomingBookingsProvider), isEmpty);
-      },
-    );
+      final container = createContainer(
+        overrides: [
+          getBookingsByUserUseCaseProvider.overrideWithValue(mockUseCase),
+          currentUserIdProvider.overrideWithValue(tUserId),
+        ],
+      );
+
+      expect(container.read(upcomingBookingsProvider), isEmpty);
+    });
+
+    test('Refleja un estado de error cuando el caso de uso falla', () async {
+      when(() => mockUseCase(any())).thenAnswer((_) async => Error(tFailure));
+
+      final container = createContainer(
+        overrides: [
+          getBookingsByUserUseCaseProvider.overrideWithValue(mockUseCase),
+          currentUserIdProvider.overrideWithValue(tUserId),
+        ],
+      );
+
+      final done = Completer<void>();
+      final sub = container.listen(bookingListProvider, (_, next) {
+        if (next.error != null && !done.isCompleted) {
+          done.complete();
+        }
+      });
+
+      await done.future;
+
+      final state = container.read(bookingListProvider);
+      expect(state.error, isNotNull);
+      expect(state.error, same(tFailure));
+      expect(container.read(upcomingBookingsProvider), isEmpty);
+
+      sub.close();
+    });
   });
 
   group('PastBookings - Filtrado y Orden', () {
