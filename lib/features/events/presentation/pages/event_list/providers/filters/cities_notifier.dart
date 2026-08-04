@@ -10,15 +10,15 @@ part 'cities_notifier.g.dart';
 class CitiesNotifier extends _$CitiesNotifier {
   @override
   Future<List<CityEntity>> build() async {
-    return ref
-        .read(getCitiesUseCaseProvider)()
-        .then(
-          (result) => switch (result) {
-            Success(:final value) => value,
-            Error(:final error) => throw error,
-          },
-        );
+    final result = await ref.watch(getCitiesUseCaseProvider)();
+    return switch (result) {
+      Success(:final value) => value,
+      Error(:final error) => throw error,
+    };
   }
 
-  Future<void> reload() => ref.refresh(citiesProvider.future);
+  Future<void> reload() async {
+    ref.invalidateSelf();
+    await future;
+  }
 }

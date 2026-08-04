@@ -10,15 +10,15 @@ part 'categories_notifier.g.dart';
 class CategoriesNotifier extends _$CategoriesNotifier {
   @override
   Future<List<CategoryEntity>> build() async {
-    return ref
-        .read(getCategoriesUseCaseProvider)()
-        .then(
-          (result) => switch (result) {
-            Success(:final value) => value,
-            Error(:final error) => throw error,
-          },
-        );
+    final result = await ref.watch(getCategoriesUseCaseProvider)();
+    return switch (result) {
+      Success(:final value) => value,
+      Error(:final error) => throw error,
+    };
   }
 
-  Future<void> reload() => ref.refresh(categoriesProvider.future);
+  Future<void> reload() async {
+    ref.invalidateSelf();
+    await future;
+  }
 }
