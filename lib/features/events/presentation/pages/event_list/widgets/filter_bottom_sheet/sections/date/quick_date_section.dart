@@ -2,7 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../domain/enums/quick_date_option_enum.dart';
-import '../../../../../../extensions/date_filter_extensions.dart';
+import '../../../../../../extensions/quick_date_option_display.dart';
 import '../../components/filter_chip_group.dart';
 
 class QuickDateSection extends StatelessWidget {

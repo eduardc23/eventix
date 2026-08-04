@@ -3,7 +3,6 @@ import '../enums/quick_date_option_enum.dart';
 
 part 'event_filter.freezed.dart';
 
-
 @freezed
 abstract class EventFilters with _$EventFilters {
   const factory EventFilters({
@@ -14,12 +13,10 @@ abstract class EventFilters with _$EventFilters {
 
   const EventFilters._();
 
-  bool get hasActiveFilters =>
-      city != null || category != null || date != null;
+  bool get hasActiveFilters => city != null || category != null || date != null;
 
   static const empty = EventFilters();
 }
-
 
 @freezed
 abstract class ActiveFilter with _$ActiveFilter {

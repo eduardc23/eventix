@@ -6,9 +6,9 @@ enum QuickDateOption {
   thisWeekend,
   thisMonth;
 
-  ({DateTime start, DateTime end}) get range {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+  ({DateTime start, DateTime end}) range([DateTime? now]) {
+    final reference = now ?? DateTime.now();
+    final today = DateTime(reference.year, reference.month, reference.day);
 
     return switch (this) {
       QuickDateOption.today => (
@@ -22,7 +22,7 @@ enum QuickDateOption {
       QuickDateOption.thisWeekend => _weekendRange(today),
       QuickDateOption.thisMonth => (
         start: today,
-        end: DateTime(now.year, now.month + 1, 0),
+        end: DateTime(reference.year, reference.month + 1, 0),
       ),
     };
   }
