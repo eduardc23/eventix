@@ -32,8 +32,8 @@ dependencies:
 
   app_ui_kit:
     git:
-      url: https://github.com/eduardc23/app_ui_kit.git
-      ref: v3.0.0
+     url: https://github.com/eduardc23/app_ui_kit.git
+     ref: v3.0.1
 
 dev_dependencies:
   flutter_test:
