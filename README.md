@@ -286,8 +286,11 @@ Viven bajo `integration_test/` y validan recorridos completos de la app con Fire
 **Flujos cubiertos:**
 
 - `auth_redirect_test.dart`: login y redirección al listado de eventos.
-- `home_events_load_test.dart`: carga de eventos en home y renderizado en pantalla.
+- `register_redirect_test.dart`: registro de nuevo usuario y redirección al home.
+- `logout_from_home_test.dart`: cierre de sesión desde el home y retorno al login.
+- `home_events_load_test.dart`: redirccion a home con un usuario auntenticado y validación de la carga de eventos.
 - `booking_flow_test.dart`: selección de evento, reserva y redirección a Mis reservas.
+- `booking_no_spots_test.dart`: validación de error cuando no hay cupos disponibles durante la reserva.
 
 **Aislamiento de producción:**
 
