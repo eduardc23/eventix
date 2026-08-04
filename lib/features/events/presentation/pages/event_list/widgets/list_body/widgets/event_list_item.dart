@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../../../core/router/app_routes.dart';
-import '../../../../../constants/events_test_keys.dart';
 import '../../../../../../domain/entities/event_entity.dart';
+import '../../../../../constants/events_test_keys.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({super.key, required this.event});
