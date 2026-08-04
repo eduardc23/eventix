@@ -13,18 +13,27 @@ class GetEventsUseCase implements UseCase<List<EventEntity>, GetEventsParams> {
   @override
   Future<Result<List<EventEntity>, AppFailure>> call(GetEventsParams params) {
     final (
-      DateTime? startDate,
+      DateTime? rawStartDate,
       DateTime? endDate,
     ) = switch (params.dateFilter) {
-      DateFilterQuick(:final option) => (option.range.start, option.range.end),
+      DateFilterQuick(:final option) => (
+        option.range().start,
+        option.range().end,
+      ),
       DateFilterRange(:final from, :final to) => (from, to),
       null => (null, null),
     };
 
+    final now = DateTime.now();
+    final effectiveStartDate =
+        (rawStartDate != null && rawStartDate.isAfter(now))
+        ? rawStartDate
+        : now;
+
     return _repository.getEvents(
       categoryId: params.categoryId,
       cityId: params.cityId,
-      startDate: startDate,
+      startDate: effectiveStartDate,
       endDate: endDate,
     );
   }

@@ -24,85 +24,72 @@ class EventsDatasourceImpl with DatasourceExecutor implements EventsDataSource {
     String? cityId,
     DateTime? startDate,
     DateTime? endDate,
-  }) =>
-      execute(
-        () async {
-          Query<Map<String, dynamic>> query = _firestore
-              .collection(EventsFirestoreConstants.eventsCollection);
+  }) => execute(() async {
+    Query<Map<String, dynamic>> query = _firestore.collection(
+      EventsFirestoreConstants.eventsCollection,
+    );
 
-          if (categoryId != null) {
-            query = query.where(
-              EventsFirestoreConstants.eventCategoryIdField,
-              isEqualTo: categoryId,
-            );
-          }
-
-          if (cityId != null) {
-            query = query.where(
-              EventsFirestoreConstants.eventCityIdField,
-              isEqualTo: cityId,
-            );
-          }
-
-          final DateTime effectiveStartDate =
-              startDate != null && startDate.isAfter(DateTime.now())
-                  ? startDate
-                  : DateTime.now();
-
-          query = query.where(
-            EventsFirestoreConstants.eventDateField,
-            isGreaterThanOrEqualTo: Timestamp.fromDate(effectiveStartDate),
-          );
-
-          if (endDate != null) {
-            query = query.where(
-              EventsFirestoreConstants.eventDateField,
-              isLessThanOrEqualTo: Timestamp.fromDate(endDate),
-            );
-          }
-
-          final snapshot = await query
-              .orderBy(EventsFirestoreConstants.eventDateField)
-              .get();
-
-          return snapshot.docs.map((doc) {
-            final data = doc.data();
-            data[EventsFirestoreConstants.uidField] = doc.id;
-            return EventModel.fromJson(data);
-          }).toList();
-        },
-        firebaseMapper: _firebaseMapper,
+    if (categoryId != null) {
+      query = query.where(
+        EventsFirestoreConstants.eventCategoryIdField,
+        isEqualTo: categoryId,
       );
+    }
+
+    if (cityId != null) {
+      query = query.where(
+        EventsFirestoreConstants.eventCityIdField,
+        isEqualTo: cityId,
+      );
+    }
+    if (startDate != null) {
+      query = query.where(
+        EventsFirestoreConstants.eventDateField,
+        isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+      );
+    }
+
+    if (endDate != null) {
+      query = query.where(
+        EventsFirestoreConstants.eventDateField,
+        isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+      );
+    }
+
+    final snapshot = await query
+        .orderBy(EventsFirestoreConstants.eventDateField)
+        .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data[EventsFirestoreConstants.uidField] = doc.id;
+      return EventModel.fromJson(data);
+    }).toList();
+  }, firebaseMapper: _firebaseMapper);
 
   @override
-  Future<List<CategoryModel>> getCategories() => execute(
-        () async {
-      final snapshot = await _firestore
-          .collection(EventsFirestoreConstants.categoriesCollection)
-          .get();
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        data[EventsFirestoreConstants.uidField] = doc.id;
-        return CategoryModel.fromJson(data);
-      }).toList();
-    },
-    firebaseMapper: _firebaseMapper,
-  );
+  Future<List<CategoryModel>> getCategories() => execute(() async {
+    final snapshot = await _firestore
+        .collection(EventsFirestoreConstants.categoriesCollection)
+        .get();
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data[EventsFirestoreConstants.uidField] = doc.id;
+      return CategoryModel.fromJson(data);
+    }).toList();
+  }, firebaseMapper: _firebaseMapper);
 
   @override
-  Future<List<CityModel>> getCities() => execute(
-        () async {
-          final snapshot = await _firestore
-              .collection(EventsFirestoreConstants.citiesCollection)
-              .orderBy(EventsFirestoreConstants.nameField)
-              .get();
+  Future<List<CityModel>> getCities() => execute(() async {
+    final snapshot = await _firestore
+        .collection(EventsFirestoreConstants.citiesCollection)
+        .orderBy(EventsFirestoreConstants.nameField)
+        .get();
 
-          return snapshot.docs.map((doc) {
-            final data = doc.data();
-            data[EventsFirestoreConstants.uidField] = doc.id;
-            return CityModel.fromJson(data);
-          }).toList();
-        },
-        firebaseMapper: _firebaseMapper,
-      );
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data[EventsFirestoreConstants.uidField] = doc.id;
+      return CityModel.fromJson(data);
+    }).toList();
+  }, firebaseMapper: _firebaseMapper);
 }
