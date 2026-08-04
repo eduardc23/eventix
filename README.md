@@ -18,6 +18,7 @@ El proyecto está construido con una arquitectura limpia, organizada por feature
 - [Firebase Integration](#firebase-integration)
 - [Error Handling](#error-handling)
 - [Dependency Injection](#dependency-injection)
+- [Testing](#testing)
 - [Data Flow](#data-flow)
 - [Installation](#installation)
 - [Licencia y Autor](#licencia-y-autor)
@@ -211,6 +212,134 @@ La inyección de dependencias se implementa mediante providers de Riverpod.
 - `booking_di_providers.dart`: registra el datasource, repository y use cases de reservas.
 
 Este diseño facilita probar cada capa por separado y reemplazar implementaciones sin modificar la lógica de negocio.
+
+## Testing
+
+El proyecto tiene una estrategia de testing por capas que cubre lógica de negocio, estado y UI de forma aislada, y flujos completos con Firebase emulado.
+
+| Tipo | Ubicación | Qué valida |
+|---|---|---|
+| Unit | `test/` | Reglas de negocio, validadores, mappers y contratos de capas |
+| Widget | `test/` | Renderizado, interacción y transiciones de estado en UI |
+| Integration | `integration_test/` | Flujos completos con dependencias reales de Firebase emulado |
+
+---
+
+### Unit & Widget Tests
+
+Viven bajo `test/` y validan lógica y UI de forma aislada.
+
+**Qué se prueba:**
+
+- **Core:** validadores, wrappers de resultado, excepciones/failures y sus mappers, utilidades de ejecución de datasource/repository, y reglas de enrutamiento y redirección de autenticación.
+- **Auth:** datasource, repository, use cases, providers, validaciones y pantallas de login/registro.
+- **Events:** datasource, repository, use cases, filtros, notifiers, extensiones y widgets/páginas de listado y detalle.
+- **Booking:** datasource, repository, use cases, providers, extensiones y UI de checkout/listado.
+- **Shell y Splash:** renderizado y comportamiento principal de navegación/estado inicial.
+
+**Helpers compartidos:**
+
+- `PumpApp`: extensión de `WidgetTester` para montar widgets con `ProviderScope` y `MaterialApp` de forma homogénea. Centraliza overrides por test, tema del proyecto e inicialización opcional de internacionalización con `setupIntl`.
+- `RiverpodHelpers`: creación de `ProviderContainer` de test con teardown automático.
+- `Fakes`: fakes compartidos de infraestructura y de fallos de dominio.
+- `Mocks`: barrel de mocks comunes, con submódulos por feature (`AuthMocks`, `EventsMocks`, `BookingMocks`).
+- `JsonReader`: lectura de fixtures JSON para modelos.
+
+**Uso de `fake_cloud_firestore` en testing:**
+
+- Se agregó `fake_cloud_firestore` como dependencia de desarrollo para probar datasources de Firestore con una base en memoria, sin red.
+- Fue necesario porque en Dart 3 algunas clases del SDK de Firestore (por ejemplo, `Query`) son `sealed`, por lo que no se pueden mockear con `implements` de forma segura en tests.
+- Beneficios principales:
+  - Reduce fragilidad de tests al validar comportamiento real de consultas (`where`, `orderBy`, `get`) en lugar de cadenas de mocks.
+  - Mejora mantenibilidad frente a cambios del SDK, evitando tests acoplados a detalles internos de la API fluida.
+  - Mantiene ejecución rápida y determinística en pruebas unitarias/widget al no depender de servicios externos.
+  - Permite verificar resultados de negocio (filtros, orden y persistencia) con menor boilerplate.
+
+**Convenciones con Riverpod:**
+
+- Se priorizan overrides de providers para aislar el comportamiento de cada capa.
+- El estado asíncrono se valida a través de listeners/estados emitidos, evitando esperas frágiles.
+- El montaje de widgets se estandariza con `pumpApp` para reducir boilerplate y garantizar un setup uniforme entre suites.
+
+**Cómo ejecutar:**
+
+```bash
+# Todos los tests
+flutter test
+
+# Solo core
+flutter test test/core
+
+# Solo un feature
+flutter test test/features/events
+
+# Un archivo puntual con salida detallada
+flutter test test/features/auth/presentation/pages/login/login_page_test.dart -r expanded
+```
+
+---
+
+### Integration Tests
+
+Viven bajo `integration_test/` y validan recorridos completos de la app con Firebase emulado. No escriben ni leen datos de producción.
+
+**Flujos cubiertos:**
+
+- `auth_redirect_test.dart`: login y redirección al listado de eventos.
+- `home_events_load_test.dart`: carga de eventos en home y renderizado en pantalla.
+- `booking_flow_test.dart`: selección de evento, reserva y redirección a Mis reservas.
+
+**Aislamiento de producción:**
+
+- Firebase Auth y Firestore se redirigen explícitamente a emuladores con `useAuthEmulator` y `useFirestoreEmulator`.
+- Los datos (`events`, `bookings`) se siembran y limpian antes/después de cada test.
+- Los usuarios de prueba se crean en Auth emulado y no afectan usuarios reales.
+
+Los helpers `IntegrationTestHelpers` e `IntegrationTestConstants` centralizan el setup y los valores repetidos entre flujos.
+
+**Cómo ejecutar:**
+
+Primero, levantar los emuladores:
+
+```bash
+pkill -f "firebase emulators" || true
+pkill -f "java.*Firestore" || true
+firebase emulators:start --only auth,firestore --project eventix-8cb23
+```
+
+Luego, en otra terminal:
+
+```bash
+flutter test integration_test
+```
+
+---
+
+### Coverage
+
+El proyecto usa LCOV para filtrar y reportar cobertura de forma portable en CI/local.
+
+```bash
+# Generar cobertura base
+flutter test --coverage
+
+# Excluir archivos autogenerados
+lcov -r coverage/lcov.info "lib/*.g.dart" -o coverage/lcov.info
+
+# Generar reporte HTML
+genhtml coverage/lcov.info -o coverage/html
+
+# Abrir el reporte
+open coverage/html/index.html       # macOS
+xdg-open coverage/html/index.html  # Linux
+```
+
+Para instalar `lcov`:
+
+```bash
+brew install lcov       # macOS
+sudo apt install lcov  # Ubuntu / Debian
+```
 
 ## Data Flow
 
