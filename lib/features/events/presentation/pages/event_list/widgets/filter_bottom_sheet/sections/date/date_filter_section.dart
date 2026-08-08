@@ -20,12 +20,14 @@ class DateFilterSection extends StatelessWidget {
     required this.onQuickOptionSelected,
     required this.onRangeSelected,
     required this.onRangeCleared,
+    required this.dateRangeMaxDays,
   });
 
   final DateFilter? selectedDate;
   final ValueChanged<QuickDateOption> onQuickOptionSelected;
   final void Function(DateTime from, DateTime to) onRangeSelected;
   final VoidCallback onRangeCleared;
+  final int dateRangeMaxDays;
 
   /// La quick option activa, si la hay.
   QuickDateOption? get _activeQuickOption => switch (selectedDate) {
@@ -51,6 +53,7 @@ class DateFilterSection extends StatelessWidget {
             }
           },
           onFilterCleared: onRangeCleared,
+          maxDays: dateRangeMaxDays,
         ),
       ],
     );

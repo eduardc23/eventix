@@ -14,6 +14,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
+import '../../../../../helpers/test_app_config.dart';
 import '../../../../events/helpers/events_test_data.dart';
 
 void main() {
@@ -47,7 +48,7 @@ void main() {
         ],
       );
 
-      expect(find.text(BookingStrings.checkoutTitle), findsOneWidget);
+      expect(find.text(testAppConfig.sections.checkout), findsOneWidget);
       expect(find.byType(QuantitySelector), findsOneWidget);
       expect(find.text(BookingStrings.payNow), findsOneWidget);
       expect(find.text('1'), findsOneWidget);

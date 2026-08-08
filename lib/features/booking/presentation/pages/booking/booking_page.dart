@@ -1,9 +1,11 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
+import 'package:eventix/core/config/app_config.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/providers/booking_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/config/app_config_extensions.dart';
 import '../../../../../core/domain/failures/app_failure.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../../events/domain/entities/event_entity.dart';
@@ -46,7 +48,11 @@ class BookingPage extends ConsumerWidget {
     );
   }
 
-  void _onBookingFailure(BuildContext context, AppFailure failure) {
+  void _onBookingFailure(
+    BuildContext context,
+    AppFailure failure,
+    AppConfig appConfig,
+  ) {
     if (failure is NoSpotsAvailableFailure) {
       showDialog(context: context, builder: (_) => const NoSpotsDialog());
       return;
@@ -55,7 +61,7 @@ class BookingPage extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: AppText(
-          failure.toBookingMessage,
+          failure.toBookingMessage(appConfig),
           variant: AppTextVariant.labelMedium,
         ),
       ),
@@ -71,7 +77,8 @@ class BookingPage extends ConsumerWidget {
     ref.listen<CreateBookingState>(createBookingProvider, (_, next) {
       next.whenOrNull(
         success: () => _onBookingSuccess(context, ref, totalPrice),
-        failure: (failure) => _onBookingFailure(context, failure),
+        failure: (failure) =>
+            _onBookingFailure(context, failure, ref.appConfig),
       );
     });
 
@@ -79,8 +86,8 @@ class BookingPage extends ConsumerWidget {
       appBar: AppBar(
         title: AppText(
           event.isFree
-              ? BookingStrings.bookingConfirmTitle
-              : BookingStrings.checkoutTitle,
+              ? ref.sectionsConfig.bookingConfirm
+              : ref.sectionsConfig.checkout,
           variant: AppTextVariant.titleLarge,
         ),
         centerTitle: true,

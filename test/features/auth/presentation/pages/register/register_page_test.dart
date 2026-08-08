@@ -17,6 +17,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../helpers/fakes.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
+import '../../../../../helpers/test_app_config.dart';
 
 void main() {
   late MockSignUpUseCase mockSignUpUseCase;
@@ -35,54 +36,52 @@ void main() {
     testWidgets('El subtítulo de registro es visible', (tester) async {
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
-      expect(find.text(AuthStrings.registerSubtitle), findsOneWidget);
+      expect(
+        find.text(testAppConfig.welcomeTexts.register.subtitle),
+        findsOneWidget,
+      );
     });
 
     testWidgets('RegisterForm es visible', (tester) async {
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
       expect(find.byType(RegisterForm), findsOneWidget);
     });
 
-    testWidgets('El texto de redirección a login y el link son visibles', (tester) async {
+    testWidgets('El texto de redirección a login y el link son visibles', (
+      tester,
+    ) async {
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
       expect(find.text(AuthStrings.alreadyHaveAccountText), findsOneWidget);
       expect(find.text(AuthStrings.loginLink), findsOneWidget);
     });
 
-    testWidgets('No se muestra ningún mensaje de error al inicio', (tester) async {
+    testWidgets('No se muestra ningún mensaje de error al inicio', (
+      tester,
+    ) async {
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
-      expect(
-        find.text(FakeAppFailure().toAuthMessage),
-        findsNothing,
-      );
+      expect(find.text(FakeAppFailure().toAuthMessage), findsNothing);
     });
   });
 
   group('RegisterPage - Comportamiento (Patrón de Booking)', () {
-    testWidgets('Muestra el estado de carga al intentar registrarse', (tester) async {
+    testWidgets('Muestra el estado de carga al intentar registrarse', (
+      tester,
+    ) async {
       final completer = Completer<Result<void, AuthFailure>>();
       addTearDown(() {
         if (!completer.isCompleted) {
@@ -90,22 +89,18 @@ void main() {
         }
       });
 
-      when(() => mockSignUpUseCase(any())).thenAnswer(
-        (_) => completer.future,
-      );
+      when(() => mockSignUpUseCase(any())).thenAnswer((_) => completer.future);
 
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
       await tester.enterText(find.byType(TextField).at(0), 'Test User');
       await tester.enterText(find.byType(TextField).at(1), 'test@test.com');
       await tester.enterText(find.byType(TextField).at(2), 'password123');
       await tester.enterText(find.byType(TextField).at(3), 'password123');
-      
+
       await tester.tap(find.text(AuthStrings.registerButton));
       await tester.pump();
 
@@ -113,15 +108,17 @@ void main() {
       expect(form.isLoading, isTrue);
     });
 
-    testWidgets('Muestra mensaje de error cuando el registro falla', (tester) async {
+    testWidgets('Muestra mensaje de error cuando el registro falla', (
+      tester,
+    ) async {
       final failure = FakeAppFailure();
-      when(() => mockSignUpUseCase(any())).thenAnswer((_) async => Error(failure));
+      when(
+        () => mockSignUpUseCase(any()),
+      ).thenAnswer((_) async => Error(failure));
 
       await tester.pumpApp(
         const RegisterPage(),
-        overrides: [
-          signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase),
-        ],
+        overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
       await tester.enterText(find.byType(TextField).at(0), 'Test User');
@@ -130,7 +127,7 @@ void main() {
       await tester.enterText(find.byType(TextField).at(3), 'password123');
 
       await tester.tap(find.text(AuthStrings.registerButton));
-      
+
       await tester.pump(); // Loading
       await tester.pump(); // Error
 
@@ -140,14 +137,18 @@ void main() {
   });
 
   group('RegisterPage - Estado Manual (Para testeo rápido de UI)', () {
-    testWidgets('El mensaje se actualiza cuando el error cambia', (tester) async {
+    testWidgets('El mensaje se actualiza cuando el error cambia', (
+      tester,
+    ) async {
       final firstFailure = AuthFailure.emailAlreadyInUse();
       final secondFailure = AuthFailure.unexpected();
 
       await tester.pumpApp(
         const RegisterPage(),
         overrides: [
-          registerProvider.overrideWithValue(RegisterState.failure(failure: firstFailure)),
+          registerProvider.overrideWithValue(
+            RegisterState.failure(failure: firstFailure),
+          ),
         ],
       );
       expect(find.text(firstFailure.toAuthMessage), findsOneWidget);
@@ -155,7 +156,9 @@ void main() {
       await tester.pumpApp(
         const RegisterPage(),
         overrides: [
-          registerProvider.overrideWithValue(RegisterState.failure(failure: secondFailure)),
+          registerProvider.overrideWithValue(
+            RegisterState.failure(failure: secondFailure),
+          ),
         ],
       );
       await tester.pump();

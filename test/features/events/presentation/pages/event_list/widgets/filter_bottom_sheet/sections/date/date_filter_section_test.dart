@@ -20,6 +20,7 @@ void main() {
             onQuickOptionSelected: (_) {},
             onRangeSelected: (f, t) {},
             onRangeCleared: () {},
+            dateRangeMaxDays: 0,
           ),
         ),
       );
@@ -38,6 +39,7 @@ void main() {
             onQuickOptionSelected: (_) {},
             onRangeSelected: (f, t) {},
             onRangeCleared: () {},
+            dateRangeMaxDays: 0,
           ),
         ),
       );

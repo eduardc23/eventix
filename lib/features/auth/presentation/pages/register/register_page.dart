@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/config/app_config_extensions.dart';
 import '../../constants/auth_strings.dart';
 import '../../extensions/auth_failure_message_extension.dart';
 import '../widgets/auth_header.dart';
@@ -19,7 +20,10 @@ class RegisterPage extends ConsumerWidget {
     final registerState = ref.watch(registerProvider);
 
     return AuthPageLayout(
-      header: const AuthHeader(subtitle: AuthStrings.registerSubtitle),
+      header: AuthHeader(
+        title: ref.appInfo.name,
+        subtitle: ref.welcomeTexts.register.subtitle,
+      ),
       errorMessage: registerState.maybeWhen(
         failure: (failure) => failure.toAuthMessage,
         orElse: () => null,

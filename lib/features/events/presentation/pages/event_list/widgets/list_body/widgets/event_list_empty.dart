@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../../../../core/config/app_config_extensions.dart';
 import '../../../../../constants/events_strings.dart';
 import '../../../providers/filters/event_filters_providers.dart';
 
@@ -12,8 +13,8 @@ class EventListEmpty extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppEmptyState(
       icon: Icons.event_busy_outlined,
-      title: EventsStrings.noEventsTitle,
-      description: EventsStrings.noEventsDescription,
+      title: ref.emptyMessages.events.title,
+      description: ref.emptyMessages.events.description,
       actionLabel: EventsStrings.clearFiltersAction,
       onAction: () {
         ref.read(appliedEventFiltersProvider.notifier).clearAll();

@@ -18,6 +18,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../../../helpers/mocks.dart';
 import '../../../../../../helpers/pump_app.dart';
+import '../../../../../../helpers/test_app_config.dart';
 import '../../../../helpers/booking_test_data.dart';
 
 void main() {
@@ -67,7 +68,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(BookingListError), findsOneWidget);
-      expect(find.text(BookingStrings.noSpotsMessage), findsOneWidget);
+      expect(find.text(testAppConfig.alerts.noSpots.message), findsOneWidget);
     });
 
     testWidgets('Muestra el estado vacío si la lista de reservas no contiene elementos', (tester) async {
@@ -84,7 +85,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(BookingListEmptyState), findsOneWidget);
-      expect(find.text(BookingStrings.emptyStateTitle), findsOneWidget);
+      expect(find.text(testAppConfig.emptyMessages.bookings.title), findsOneWidget);
     });
   });
 

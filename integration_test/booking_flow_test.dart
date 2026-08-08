@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventix/core/config/app_config_loader.dart';
+import 'package:eventix/core/config/app_config_provider.dart';
 import 'package:eventix/core/di/core_di_providers.dart';
-import 'package:eventix/features/booking/presentation/constants/booking_strings.dart';
 import 'package:eventix/features/booking/presentation/constants/booking_test_keys.dart';
 import 'package:eventix/features/booking/presentation/pages/booking/booking_page.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/booking_list_page.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   await initializeIntegrationTestEnvironment();
+  final config = await AppConfigLoader.load();
 
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
@@ -66,7 +68,10 @@ Future<void> main() async {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [currentUserIdProvider.overrideWithValue(userId)],
+        overrides: [
+          currentUserIdProvider.overrideWithValue(userId),
+          appConfigProvider.overrideWithValue(config),
+        ],
         child: const MyApp(),
       ),
     );
@@ -87,7 +92,7 @@ Future<void> main() async {
     await tester.tap(find.byKey(BookingTestKeys.confirmActionButton));
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
-    expect(find.text(BookingStrings.bookingConfirmedTitle), findsOneWidget);
+    expect(find.text(config.alerts.bookingSuccess.title), findsOneWidget);
 
     await tester.tap(find.byKey(BookingTestKeys.successDialogOkButton));
     await tester.pumpAndSettle(const Duration(seconds: 1));

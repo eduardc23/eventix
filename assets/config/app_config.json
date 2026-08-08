@@ -1,0 +1,50 @@
+{
+  "app": {
+    "name": "Eventix"
+  },
+  "config": {
+    "ui": {
+      "filtersInitialSize": 0.7,
+      "filtersMinSize": 0.5,
+      "filtersMaxSize": 0.95,
+      "dateRangeMaxDays": 365
+    }
+  },
+  "sections": {
+    "events": "Eventos",
+    "eventDetail": "Detalle del Evento",
+    "myBookings": "Mis reservas",
+    "checkout": "Checkout",
+    "filters": "Filtrar eventos",
+    "bookingConfirm": "Confirmar reserva"
+  },
+  "welcomeTexts": {
+    "login": {
+      "subtitle": "Inicia sesión para gestionar tus eventos y entradas."
+    },
+    "register": {
+      "subtitle": "Crea una cuenta para empezar a organizar tus eventos."
+    }
+  },
+  "alerts": {
+    "bookingSuccess": {
+      "title": "¡Reserva Confirmada!",
+      "message": "Tu lugar ha sido asegurado con éxito."
+    },
+    "noSpots": {
+      "title": "Sin cupos disponibles",
+      "message": "Lo sentimos, ya no quedan cupos para este evento."
+    },
+    "paymentProcessed": "El pago se procesó correctamente."
+  },
+  "emptyMessages": {
+    "events": {
+      "title": "Sin eventos",
+      "description": "No encontramos eventos con los filtros seleccionados."
+    },
+    "bookings": {
+      "title": "Sin reservas aún",
+      "description": "Explora eventos y reserva tu próxima experiencia."
+    }
+  }
+}

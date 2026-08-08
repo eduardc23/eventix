@@ -11,14 +11,16 @@ import 'package:eventix/features/events/presentation/pages/event_list/providers/
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/pump_app.dart';
+
 // Mocks
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
 class MockUser extends Mock implements User {}
 
 /// Notificador simulado para evitar efectos secundarios (API/DB)
@@ -26,7 +28,7 @@ class MockUser extends Mock implements User {}
 class MockEventsNotifier extends EventsNotifier {
   @override
   Future<List<EventEntity>> build() async {
-    return []; 
+    return [];
   }
 }
 
@@ -43,33 +45,24 @@ void main() {
     ).thenAnswer((_) => const Stream.empty());
   });
 
-  /// Crea un entorno de pruebas con [ProviderScope] configurado.
-  /// 
-  /// Inyecta el estado de autenticación y captura la instancia del [GoRouter]
-  /// mediante un [Consumer] para permitir navegaciones controladas en el test.
-  Widget createRouterApp({
-    required AsyncValue<User?> authState,
-    List<Override> additionalOverrides = const [],
-  }) {
-    return ProviderScope(
-      overrides: [
-        firebaseAuthProvider.overrideWithValue(mockFirebaseAuth),
-        authStateChangesProvider.overrideWithValue(authState),
-        ...additionalOverrides,
-      ],
-      child: Consumer(
-        builder: (context, ref, _) {
-          router = ref.watch(appRouterProvider);
-          return MaterialApp.router(routerConfig: router);
-        },
-      ),
-    );
-  }
-
   group('AppRouter - Cableado de Pantallas', () {
-    testWidgets('La ruta login renderiza correctamente LoginPage', (tester) async {
-      await tester.pumpWidget(
-        createRouterApp(authState: const AsyncValue.data(null)),
+    testWidgets('La ruta login renderiza correctamente LoginPage', (
+      tester,
+    ) async {
+      await tester.pumpApp(
+        Consumer(
+          builder: (context, ref, _) {
+            router = ref.watch(appRouterProvider);
+            return MaterialApp.router(routerConfig: router);
+          },
+        ),
+        overrides: [
+          firebaseAuthProvider.overrideWithValue(mockFirebaseAuth),
+          authStateChangesProvider.overrideWithValue(
+            const AsyncValue.data(null),
+          ),
+        ],
+        wrapWithMaterialApp: false,
       );
       await tester.pumpAndSettle();
 
@@ -82,8 +75,20 @@ void main() {
     testWidgets('La ruta register renderiza correctamente RegisterPage', (
       tester,
     ) async {
-      await tester.pumpWidget(
-        createRouterApp(authState: const AsyncValue.data(null)),
+      await tester.pumpApp(
+        Consumer(
+          builder: (context, ref, _) {
+            router = ref.watch(appRouterProvider);
+            return MaterialApp.router(routerConfig: router);
+          },
+        ),
+        overrides: [
+          firebaseAuthProvider.overrideWithValue(mockFirebaseAuth),
+          authStateChangesProvider.overrideWithValue(
+            const AsyncValue.data(null),
+          ),
+        ],
+        wrapWithMaterialApp: false,
       );
       await tester.pumpAndSettle();
 
@@ -96,13 +101,21 @@ void main() {
     testWidgets(
       'La ruta de eventos renderiza EventListPage dentro del Shell para usuarios autenticados',
       (tester) async {
-        await tester.pumpWidget(
-          createRouterApp(
-            authState: AsyncValue.data(MockUser()),
-            additionalOverrides: [
-              eventsProvider.overrideWith(MockEventsNotifier.new),
-            ],
+        await tester.pumpApp(
+          Consumer(
+            builder: (context, ref, _) {
+              router = ref.watch(appRouterProvider);
+              return MaterialApp.router(routerConfig: router);
+            },
           ),
+          overrides: [
+            firebaseAuthProvider.overrideWithValue(mockFirebaseAuth),
+            authStateChangesProvider.overrideWithValue(
+              AsyncValue.data(MockUser()),
+            ),
+            eventsProvider.overrideWith(MockEventsNotifier.new),
+          ],
+          wrapWithMaterialApp: false,
         );
         await tester.pumpAndSettle();
 
@@ -112,91 +125,101 @@ void main() {
   });
 
   group('StreamToListenable - Notificaciones y Ciclo de Vida', () {
+    test(
+      'El listenable notifica a sus oyentes al recibir eventos del flujo',
+      () async {
+        final controller = StreamController<User?>.broadcast();
+        final notified = Completer<void>();
+        int callCount = 0;
 
-    test('El listenable notifica a sus oyentes al recibir eventos del flujo', () async {
-      final controller = StreamController<User?>.broadcast();
-      final notified = Completer<void>();
-      int callCount = 0;
+        final listenable = StreamToListenable(controller.stream)
+          ..addListener(() {
+            callCount++;
+            if (!notified.isCompleted) {
+              notified.complete();
+            }
+          });
 
-      final listenable = StreamToListenable(controller.stream)
-        ..addListener(() {
-          callCount++;
-          if (!notified.isCompleted) {
-            notified.complete();
-          }
-        });
+        controller.add(null);
+        await notified.future;
 
-      controller.add(null);
-      await notified.future;
+        expect(callCount, equals(1));
 
-      expect(callCount, equals(1));
+        listenable.dispose();
+        await controller.close();
+      },
+    );
 
-      listenable.dispose();
-      await controller.close();
-    });
+    test(
+      'Se genera una notificación única por cada emisión del flujo',
+      () async {
+        final controller = StreamController<User?>.broadcast();
+        final notified = Completer<void>();
+        int callCount = 0;
 
-    test('Se genera una notificación única por cada emisión del flujo', () async {
-      final controller = StreamController<User?>.broadcast();
-      final notified = Completer<void>();
-      int callCount = 0;
+        final listenable = StreamToListenable(controller.stream)
+          ..addListener(() {
+            callCount++;
+            if (callCount == 3 && !notified.isCompleted) {
+              notified.complete();
+            }
+          });
 
-      final listenable = StreamToListenable(controller.stream)
-        ..addListener(() {
-          callCount++;
-          if (callCount == 3 && !notified.isCompleted) {
-            notified.complete();
-          }
-        });
+        controller
+          ..add(null)
+          ..add(MockUser())
+          ..add(null);
 
-      controller
-        ..add(null)
-        ..add(MockUser()) 
-        ..add(null);
+        await notified.future;
 
-      await notified.future;
+        expect(callCount, equals(3));
 
-      expect(callCount, equals(3));
+        listenable.dispose();
+        await controller.close();
+      },
+    );
 
-      listenable.dispose();
-      await controller.close();
-    });
+    test(
+      'Los oyentes dejan de recibir notificaciones tras invocar dispose',
+      () async {
+        final controller = StreamController<User?>.broadcast();
+        int callCount = 0;
 
-    test('Los oyentes dejan de recibir notificaciones tras invocar dispose', () async {
-      final controller = StreamController<User?>.broadcast();
-      int callCount = 0;
+        final listenable = StreamToListenable(controller.stream)
+          ..addListener(() => callCount++);
 
-      final listenable = StreamToListenable(controller.stream)
-        ..addListener(() => callCount++);
+        listenable.dispose();
 
-      listenable.dispose();
+        controller.add(null);
 
-      controller.add(null);
+        expect(callCount, equals(0));
 
-      expect(callCount, equals(0)); 
+        await controller.close();
+      },
+    );
 
-      await controller.close();
-    });
+    test(
+      'La suscripción al flujo se cancela automáticamente al liberar el objeto',
+      () async {
+        final canceled = Completer<void>();
+        final controller = StreamController<User?>.broadcast(
+          onCancel: () {
+            if (!canceled.isCompleted) {
+              canceled.complete();
+            }
+          },
+        );
+        final listenable = StreamToListenable(controller.stream);
 
+        expect(controller.hasListener, isTrue);
 
-    test('La suscripción al flujo se cancela automáticamente al liberar el objeto', () async {
-      final canceled = Completer<void>();
-      final controller = StreamController<User?>.broadcast(
-        onCancel: () {
-          if (!canceled.isCompleted) {
-            canceled.complete();
-          }
-        },
-      );
-      final listenable = StreamToListenable(controller.stream);
+        listenable.dispose();
+        await canceled.future;
 
-      expect(controller.hasListener, isTrue);
+        expect(controller.hasListener, isFalse);
 
-      listenable.dispose();
-      await canceled.future;
-
-      expect(controller.hasListener, isFalse);
-
-      await controller.close();
-    });
+        await controller.close();
+      },
+    );
   });
 }

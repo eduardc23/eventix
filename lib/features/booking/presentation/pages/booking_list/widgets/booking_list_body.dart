@@ -1,4 +1,5 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
+import 'package:eventix/core/config/app_config_extensions.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,8 +22,9 @@ class BookingListBody extends ConsumerWidget {
 
     return bookingsAsync.when(
       loading: () => const Center(child: AppLoader.medium()),
-      error: (error, stack) =>
-          BookingListError(error: error.asFailure.toBookingMessage),
+      error: (error, stack) => BookingListError(
+        error: error.asFailure.toBookingMessage(ref.appConfig),
+      ),
       data: (bookings) {
         if (bookings.isEmpty) {
           return const BookingListEmptyState();

@@ -18,6 +18,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../helpers/fakes.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
+import '../../../../../helpers/test_app_config.dart';
 
 void main() {
   late MockSignInUseCase mockSignInUseCase;
@@ -39,7 +40,7 @@ void main() {
         ],
       );
 
-      expect(find.text(AuthStrings.loginSubtitle), findsOneWidget);
+      expect(find.text(testAppConfig.welcomeTexts.login.subtitle), findsOneWidget);
     });
 
     testWidgets('LoginForm es visible', (tester) async {

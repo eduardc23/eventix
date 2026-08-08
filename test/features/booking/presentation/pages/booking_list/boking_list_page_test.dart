@@ -1,10 +1,10 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
-import 'package:eventix/features/booking/presentation/constants/booking_strings.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/booking_list_page.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/widgets/booking_list_body.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../../helpers/pump_app.dart';
+import '../../../../../helpers/test_app_config.dart';
 
 void main() {
   group('BookingListPage - Renderizado', () {
@@ -26,7 +26,7 @@ void main() {
     ) async {
       await tester.pumpApp(BookingListPage());
 
-      expect(find.text(BookingStrings.bookingListTitle), findsOneWidget);
+      expect(find.text(testAppConfig.sections.myBookings), findsOneWidget);
     });
   });
 }

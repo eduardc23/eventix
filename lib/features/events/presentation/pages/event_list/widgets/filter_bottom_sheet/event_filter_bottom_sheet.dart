@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../../../core/config/app_config_extensions.dart';
 import '../../../../constants/events_strings.dart';
 import '../../providers/filters/event_filters_providers.dart';
 import 'components/bottom_sheet_handle.dart';
@@ -25,9 +26,9 @@ class EventFilterBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.7,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
+      initialChildSize: ref.uiConfig.filtersInitialSize,
+      minChildSize: ref.uiConfig.filtersMinSize,
+      maxChildSize: ref.uiConfig.filtersMaxSize,
       builder: (_, scrollController) {
         return _SheetContent(scrollController: scrollController);
       },

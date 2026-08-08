@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/config/app_config_extensions.dart';
 import '../../../../core/domain/failures/app_failure.dart';
 import '../../../auth/presentation/providers/sign_out_provider.dart';
 import '../constants/main_shell_strings.dart';
@@ -47,16 +48,16 @@ class MainShell extends ConsumerWidget {
             initialLocation: index == navigationShell.currentIndex,
           );
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: AppIcon(Icons.event_outlined),
-            selectedIcon: AppIcon(Icons.event),
-            label: MainShellStrings.eventsLabel,
+            icon: const AppIcon(Icons.event_outlined),
+            selectedIcon: const AppIcon(Icons.event),
+            label: ref.sectionsConfig.events,
           ),
           NavigationDestination(
-            icon: AppIcon(Icons.confirmation_number_outlined),
-            selectedIcon: AppIcon(Icons.confirmation_number),
-            label: MainShellStrings.myBookingsLabel,
+            icon: const AppIcon(Icons.confirmation_number_outlined),
+            selectedIcon: const AppIcon(Icons.confirmation_number),
+            label: ref.sectionsConfig.myBookings,
           ),
         ],
       ),

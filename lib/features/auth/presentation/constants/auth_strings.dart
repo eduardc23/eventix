@@ -3,9 +3,7 @@ class AuthStrings {
 
   // Títulos y Subtítulos
   static const String loginTitle = 'Iniciar sesión';
-  static const String loginSubtitle = 'Inicia sesión para gestionar tus eventos y entradas.';
   static const String registerTitle = 'Registro';
-  static const String registerSubtitle = 'Crea una cuenta para empezar a organizar tus eventos.';
 
   // Botones y Enlaces
   static const String loginButton = 'Iniciar sesión';

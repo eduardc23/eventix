@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
@@ -75,7 +74,6 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: AppRoutes.events,
                 builder: (_, _) => const EventListPage(),
-                // Sin rutas anidadas aquí
               ),
             ],
           ),
@@ -115,7 +113,7 @@ GoRouter appRouter(Ref ref) {
 @visibleForTesting
 class StreamToListenable extends ChangeNotifier {
   StreamToListenable(Stream<User?> stream) {
-    _sub = stream.listen((_) => notifyListeners()); // <-- Eliminamos .asBroadcastStream()
+    _sub = stream.listen((_) => notifyListeners());
   }
 
   late final StreamSubscription _sub;

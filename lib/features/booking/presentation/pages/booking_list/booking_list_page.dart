@@ -1,18 +1,19 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/booking_strings.dart';
+import '../../../../../core/config/app_config_extensions.dart';
 import 'widgets/booking_list_body.dart';
 
-class BookingListPage extends StatelessWidget {
+class BookingListPage extends ConsumerWidget {
   const BookingListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppScaffold(
       appBar: AppTopBar(
         onMenuPressed: () => Scaffold.of(context).openDrawer(),
-        title: BookingStrings.bookingListTitle,
+        title: ref.sectionsConfig.myBookings,
       ),
       body: const BookingListBody(),
     );

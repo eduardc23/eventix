@@ -1,15 +1,16 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_constants.dart';
 
 class AuthHeader extends StatelessWidget {
   const AuthHeader({
     super.key,
     required this.subtitle,
+    required this.title,
   });
 
   final String subtitle;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class AuthHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppText(
-          AppConstants.appName,
+          title ,
           variant: AppTextVariant.displayMedium,
           color: context.colorScheme.primary,
         ),

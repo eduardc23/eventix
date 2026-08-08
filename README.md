@@ -14,6 +14,7 @@ El proyecto está construido con una arquitectura limpia, organizada por feature
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Architecture](#architecture)
+- [App Configuration](#app-configuration)
 - [Navigation](#navigation)
 - [Firebase Integration](#firebase-integration)
 - [Error Handling](#error-handling)
@@ -64,6 +65,7 @@ La estructura del proyecto sigue un enfoque feature-first con un núcleo transve
 ```text
 lib/
 ├── core/
+│   ├── config/
 │   ├── constants/
 │   ├── data/
 │   ├── di/
@@ -122,8 +124,101 @@ flowchart LR
 4. Infrastructure / Firebase
   - Firebase Authentication y Cloud Firestore como proveedores de datos y sesión.
 
+## Configuración de la App
 
+Los textos, nombres de secciones, parámetros visuales y estados vacíos están
+centralizados en un único asset JSON (`assets/config/app_config.json`)
 
+### Estructura del JSON
+
+| Clave           | Descripción                                      |
+|-----------------|--------------------------------------------------|
+| `app`           | Nombre de la app                                 |
+| `config.ui`     | Parámetros visuales (tamaños de sheet, rangos)   |
+| `sections`      | Títulos de las pantallas                         |
+| `welcomeTexts`  | Textos de login y registro                       |
+| `alerts`        | Mensajes de confirmación y feedback              |
+| `emptyMessages` | Títulos y descripciones de estados vacíos        |
+
+### Cómo funciona
+
+El JSON se carga una única vez al inicio de la app mediante `AppConfigLoader`
+y se inyecta en el `ProviderScope` de Riverpod como override, quedando
+disponible en todo el árbol de widgets sin necesidad de pasarlo por parámetros.
+
+### Uso en widgets
+
+La extensión `AppConfigX` sobre `WidgetRef` expone accesos directos
+a cada sección de la config, evitando repetir `ref.read(appConfigProvider)`
+en cada widget:
+
+```dart
+// core/config/app_config_extension.dart
+extension AppConfigX on WidgetRef {
+  AppConfig get appConfig => read(appConfigProvider);
+
+  UiConfig get uiConfig       => read(appConfigProvider).config;
+  Sections get sections       => read(appConfigProvider).sections;
+  WelcomeTexts get welcomeTexts => read(appConfigProvider).welcomeTexts;
+  Alerts get alerts           => read(appConfigProvider).alerts;
+  EmptyMessages get emptyMessages => read(appConfigProvider).emptyMessages;
+}
+```
+
+Los widgets que extiendan `ConsumerWidget` tienen acceso inmediato
+a través de `ref` sin imports adicionales de providers:
+
+```dart
+// Acceso a textos de bienvenida
+class LoginPage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final welcome = ref.welcomeTexts.login;
+
+    return Column(
+      children: [
+        Text(welcome.title),
+        Text(welcome.subtitle),
+      ],
+    );
+  }
+}
+
+// Acceso a parámetros visuales
+class FiltersSheet extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ui = ref.uiConfig;
+
+    return DraggableScrollableSheet(
+      initialChildSize: ui.filtersInitialSize,
+      minChildSize: ui.filtersMinSize,
+      maxChildSize: ui.filtersMaxSize,
+      builder: (_, controller) => const FilterPanel(),
+    );
+  }
+}
+
+// Acceso a estados vacíos
+class BookingsPage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final empty = ref.emptyMessages.bookings;
+
+    return EmptyStateWidget(
+      title: empty.title,
+      description: empty.description,
+    );
+  }
+}
+```
+
+### Agregar nuevos valores de configuración
+
+1. Añade la clave en `assets/app_config.json`
+2. Añade el campo al modelo correspondiente en `core/config/models/`
+3. Actualiza el `fromJson` de ese modelo
+4. Opcionalmente expón un acceso directo en `app_config_extension.dart`
 ## Navigation
 
 La navegación se implementa con Go Router y un shell de navegación por tabs.

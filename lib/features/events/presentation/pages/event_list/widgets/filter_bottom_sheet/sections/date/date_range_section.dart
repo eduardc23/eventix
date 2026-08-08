@@ -10,11 +10,13 @@ class DateRangeSection extends StatelessWidget {
     required this.dateFilter,
     required this.onFilterChanged,
     required this.onFilterCleared,
+    required this.maxDays,
   });
 
   final DateFilter? dateFilter;
   final ValueChanged<DateFilter> onFilterChanged;
   final VoidCallback onFilterCleared;
+  final int maxDays;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,9 @@ class DateRangeSection extends StatelessWidget {
         final picked = await showDateRangePicker(
           context: context,
           firstDate: DateTime.now(),
-          lastDate: DateTime.now().add(const Duration(days: 365)),
+          lastDate: DateTime.now().add(
+            Duration(days: maxDays),
+          ),
           initialDateRange: initialRange,
         );
 

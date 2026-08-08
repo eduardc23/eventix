@@ -4,7 +4,6 @@ import 'package:eventix/features/auth/di/auth_di_providers.dart';
 import 'package:eventix/features/shell/presentation/constants/main_shell_strings.dart';
 import 'package:eventix/features/shell/presentation/pages/main_shell.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +11,8 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/fakes.dart';
 import '../../../../helpers/mocks.dart';
+import '../../../../helpers/pump_app.dart';
+import '../../../../helpers/test_app_config.dart';
 
 void main() {
   Future<void> pumpMainShell(
@@ -47,14 +48,13 @@ void main() {
       ],
     );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: overrides,
-        child: MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
+    await tester.pumpApp(
+      MaterialApp.router(
+        theme: AppTheme.light,
+        routerConfig: router,
       ),
+      overrides: overrides,
+      wrapWithMaterialApp: false,
     );
     await tester.pumpAndSettle();
   }
@@ -66,8 +66,8 @@ void main() {
       await pumpMainShell(tester);
 
       expect(find.byType(NavigationBar), findsOneWidget);
-      expect(find.text(MainShellStrings.eventsLabel), findsOneWidget);
-      expect(find.text(MainShellStrings.myBookingsLabel), findsOneWidget);
+      expect(find.text(testAppConfig.sections.events), findsOneWidget);
+      expect(find.text(testAppConfig.sections.myBookings), findsOneWidget);
     });
 
     testWidgets('Cambia de rama al seleccionar un destino', (
@@ -80,7 +80,7 @@ void main() {
       expect(find.byKey(const Key('bookings_page')), findsNothing);
 
       // Pulsamos en Mis reservas
-      await tester.tap(find.text(MainShellStrings.myBookingsLabel));
+      await tester.tap(find.text(testAppConfig.sections.myBookings));
       await tester.pumpAndSettle();
 
       // Deberíamos estar en la página de reservas
@@ -88,7 +88,7 @@ void main() {
       expect(find.byKey(const Key('bookings_page')), findsOneWidget);
 
       // Volver a eventos
-      await tester.tap(find.text(MainShellStrings.eventsLabel));
+      await tester.tap(find.text(testAppConfig.sections.events));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('events_page')), findsOneWidget);
     });

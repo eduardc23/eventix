@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/config/app_config_extensions.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../constants/auth_strings.dart';
 import '../../extensions/auth_failure_message_extension.dart';
@@ -20,7 +21,10 @@ class LoginPage extends ConsumerWidget {
     final loginState = ref.watch(loginProvider);
 
     return AuthPageLayout(
-      header: const AuthHeader(subtitle: AuthStrings.loginSubtitle),
+      header: AuthHeader(
+        title: ref.appInfo.name,
+        subtitle: ref.welcomeTexts.login.subtitle,
+      ),
       errorMessage: loginState.maybeWhen(
         failure: (failure) => failure.toAuthMessage,
         orElse: () => null,

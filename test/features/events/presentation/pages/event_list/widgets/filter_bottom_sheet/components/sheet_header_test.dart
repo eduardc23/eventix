@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../../../../../helpers/pump_app.dart';
+import '../../../../../../../../helpers/test_app_config.dart';
 
 void main() {
   group('SheetHeader - Renderizado', () {
     testWidgets('Visualiza el título y la acción de reinicio de filtros', (tester) async {
       await tester.pumpApp(const Scaffold(body: SheetHeader()));
 
-      expect(find.text(EventsStrings.filterTitle), findsOneWidget);
+      expect(find.text(testAppConfig.sections.filters), findsOneWidget);
       expect(find.text(EventsStrings.resetFilters), findsOneWidget);
     });
   });

@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../../../../core/config/app_config_extensions.dart';
 import '../../../../../constants/events_strings.dart';
 import '../../../providers/filters/event_filters_providers.dart';
 
@@ -13,9 +14,9 @@ class SheetHeader extends ConsumerWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        const Center(
+        Center(
           child: AppText(
-            EventsStrings.filterTitle,
+            ref.sectionsConfig.filters,
             variant: AppTextVariant.titleMedium,
           ),
         ),

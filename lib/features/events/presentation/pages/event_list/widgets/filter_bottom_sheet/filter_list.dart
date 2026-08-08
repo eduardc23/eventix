@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../../../core/config/app_config_extensions.dart';
 import '../../../../constants/events_strings.dart';
 import '../../providers/filters/event_filters_providers.dart';
 import 'sections/category_filter_section.dart';
@@ -44,6 +45,7 @@ class FilterList extends ConsumerWidget {
               onQuickOptionSelected: notifier.toggleQuickDate,
               onRangeSelected: notifier.selectDateRange,
               onRangeCleared: notifier.clearDateRange,
+              dateRangeMaxDays: ref.uiConfig.dateRangeMaxDays,
             ),
           ),
         ],

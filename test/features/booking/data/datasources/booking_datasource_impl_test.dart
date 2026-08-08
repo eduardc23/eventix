@@ -8,9 +8,9 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/mocks.dart';
+import '../../../events/helpers/events_json_factories.dart';
 import '../../helpers/booking_json_factories.dart';
 import '../../helpers/booking_test_data.dart';
-import '../../../events/helpers/events_json_factories.dart';
 
 void main() {
   late FakeFirebaseFirestore fakeFirestore;

@@ -17,6 +17,7 @@ void main() {
             dateFilter: null,
             onFilterChanged: (_) {},
             onFilterCleared: () {},
+            maxDays: 0,
           ),
         ),
       );
@@ -37,6 +38,7 @@ void main() {
             dateFilter: DateFilter.range(from: from, to: to),
             onFilterChanged: (_) {},
             onFilterCleared: () {},
+            maxDays: 0,
           ),
         ),
       );
@@ -61,6 +63,7 @@ void main() {
               dateFilter: DateFilter.range(from: from, to: to),
               onFilterChanged: (_) {},
               onFilterCleared: () => cleared = true,
+              maxDays: 0,
             ),
           ),
         );

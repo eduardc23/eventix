@@ -23,9 +23,6 @@ class EventsStrings {
   static const selectDateRange = 'Seleccionar rango';
 
   // States
-  static const noEventsTitle = 'Sin eventos';
-  static const noEventsDescription =
-      'No encontramos eventos con los filtros seleccionados.';
   static const errorTitle = 'Algo salió mal';
   static const retryAction = 'Reintentar';
   static const categoriesLoadError = 'No se pudieron cargar las categorias';
