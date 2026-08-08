@@ -14,7 +14,7 @@ El proyecto está construido con una arquitectura limpia, organizada por feature
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Architecture](#architecture)
-- [App Configuration](#app-configuration)
+- [Configuración de la App](#configuración-de-la-app)
 - [Navigation](#navigation)
 - [Firebase Integration](#firebase-integration)
 - [Error Handling](#error-handling)
