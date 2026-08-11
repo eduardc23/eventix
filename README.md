@@ -139,12 +139,18 @@ centralizados en un único asset JSON (`assets/config/app_config.json`)
 | `welcomeTexts`  | Textos de login y registro                       |
 | `alerts`        | Mensajes de confirmación y feedback              |
 | `emptyMessages` | Títulos y descripciones de estados vacíos        |
+| `defaults`      | Valores locales por defecto para catálogos       |
 
 ### Cómo funciona
 
 El JSON se carga una única vez al inicio de la app mediante `AppConfigLoader`
 y se inyecta en el `ProviderScope` de Riverpod como override, quedando
 disponible en todo el árbol de widgets sin necesidad de pasarlo por parámetros.
+
+Además de textos y parámetros visuales, este asset también puede exponer
+valores locales por defecto para catálogos. En el caso de categorías, esos
+defaults se usan solo en el estado inicial mientras la app consulta al backend;
+cuando llega la respuesta remota, esa información reemplaza al valor local.
 
 ### Uso en widgets
 

@@ -2,6 +2,7 @@ import 'package:eventix/core/config/app_config.dart';
 import 'package:eventix/core/config/models/alerts_config.dart';
 import 'package:eventix/core/config/models/app_info.dart';
 import 'package:eventix/core/config/models/banners_config.dart';
+import 'package:eventix/core/config/models/defaults_config.dart';
 import 'package:eventix/core/config/models/empty_messages_config.dart';
 import 'package:eventix/core/config/models/general_config.dart';
 import 'package:eventix/core/config/models/sections_config.dart';
@@ -31,13 +32,31 @@ final testAppConfig = AppConfig(
     register: AuthTextConfig(subtitle: 'Register Subtitle'),
   ),
   alerts: AlertsConfig(
-    bookingSuccess: AlertDetailConfig(title: 'Success', message: 'Booking successful'),
-    noSpots: AlertDetailConfig(title: 'No Spots', message: 'No spots available'),
+    bookingSuccess: AlertDetailConfig(
+      title: 'Success',
+      message: 'Booking successful',
+    ),
+    noSpots: AlertDetailConfig(
+      title: 'No Spots',
+      message: 'No spots available',
+    ),
     paymentProcessed: 'Payment processed correctly',
   ),
   emptyMessages: EmptyMessagesConfig(
-    events: EmptyMessageDetailConfig(title: 'No Events', description: 'No events found'),
-    bookings: EmptyMessageDetailConfig(title: 'No Bookings', description: 'No bookings found'),
+    events: EmptyMessageDetailConfig(
+      title: 'No Events',
+      description: 'No events found',
+    ),
+    bookings: EmptyMessageDetailConfig(
+      title: 'No Bookings',
+      description: 'No bookings found',
+    ),
+  ),
+  defaults: DefaultsConfig(
+    categories: [
+      DefaultCategoryConfig(uid: 'cat-default-1', name: 'Music'),
+      DefaultCategoryConfig(uid: 'cat-default-2', name: 'Sports'),
+    ],
   ),
   banners: BannersConfig(
     auth: AuthBannersConfig(
@@ -46,11 +65,7 @@ final testAppConfig = AppConfig(
       tooManyRequests: 'Too many requests',
       unexpectedError: 'Unexpected auth error',
     ),
-    booking: BookingBannersConfig(
-      unexpectedError: 'Unexpected booking error',
-    ),
-    shell: ShellBannersConfig(
-      signOutError: 'Sign out error',
-    ),
+    booking: BookingBannersConfig(unexpectedError: 'Unexpected booking error'),
+    shell: ShellBannersConfig(signOutError: 'Sign out error'),
   ),
 );

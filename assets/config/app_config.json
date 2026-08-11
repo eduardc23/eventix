@@ -47,6 +47,50 @@
       "description": "Explora eventos y reserva tu próxima experiencia."
     }
   },
+ "defaults": {
+  "categories": [
+      {
+        "uid": "0xg0gG5QeJIbxU6p41IA",
+        "name": "Networking"
+      },
+      {
+        "uid": "Fh2sNx9NmbANMW33NHZY",
+        "name": "Música"
+      },
+      {
+        "uid": "GOHWThRhRBzGEThFYIrT",
+        "name": "Entretenimiento familiar"
+      },
+      {
+        "uid": "PlDJkRWkxqi4xuiRCnJG",
+        "name": "Educación"
+      },
+      {
+        "uid": "QpJNHwl7AYFHosKTSJuL",
+        "name": "Deportes"
+      },
+      {
+        "uid": "VigBm7BO7lWWbH8uJSV8",
+        "name": "Cine"
+      },
+      {
+        "uid": "d4A5jOazeGwDZ0zglND1",
+        "name": "Tecnología"
+      },
+      {
+        "uid": "jyhDjDuhd6BNNZOx6Qtj",
+        "name": "Gastronomía"
+      },
+      {
+        "uid": "xW1HCMi80JFa8w036Qoj",
+        "name": "Teatro y Danza"
+      },
+      {
+        "uid": "z4mSLqyNP8AvWYy6SfBK",
+        "name": "Arte y Exposiciones"
+      }
+    ]
+  },
   "banners": {
     "auth": {
       "invalidCredentials": "Correo o contraseña incorrectos. Intenta de nuevo.",
