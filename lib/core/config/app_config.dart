@@ -4,7 +4,6 @@ import '../data/exceptions/config_exceptions.dart';
 import 'models/alerts_config.dart';
 import 'models/app_info.dart';
 import 'models/banners_config.dart';
-import 'models/defaults_config.dart';
 import 'models/empty_messages_config.dart';
 import 'models/general_config.dart';
 import 'models/sections_config.dart';
@@ -17,7 +16,6 @@ class AppConfig {
   final WelcomeTextsConfig welcomeTexts;
   final AlertsConfig alerts;
   final EmptyMessagesConfig emptyMessages;
-  final DefaultsConfig defaults;
   final BannersConfig banners;
 
   AppConfig({
@@ -27,58 +25,29 @@ class AppConfig {
     required this.welcomeTexts,
     required this.alerts,
     required this.emptyMessages,
-    required this.defaults,
     required this.banners,
   });
 
   factory AppConfig.fromJson(Map<String, dynamic> json) {
     return AppConfig(
       app: AppConfigParser.parseSection(json, 'app', AppInfo.fromJson),
-      config: AppConfigParser.parseSection(
-        json,
-        'config',
-        GeneralConfig.fromJson,
-      ),
-      sections: AppConfigParser.parseSection(
-        json,
-        'sections',
-        SectionsConfig.fromJson,
-      ),
-      welcomeTexts: AppConfigParser.parseSection(
-        json,
-        'welcomeTexts',
-        WelcomeTextsConfig.fromJson,
-      ),
-      alerts: AppConfigParser.parseSection(
-        json,
-        'alerts',
-        AlertsConfig.fromJson,
-      ),
-      emptyMessages: AppConfigParser.parseSection(
-        json,
-        'emptyMessages',
-        EmptyMessagesConfig.fromJson,
-      ),
-      defaults: AppConfigParser.parseSection(
-        json,
-        'defaults',
-        DefaultsConfig.fromJson,
-      ),
-      banners: AppConfigParser.parseSection(
-        json,
-        'banners',
-        BannersConfig.fromJson,
-      ),
+      config: AppConfigParser.parseSection(json, 'config', GeneralConfig.fromJson),
+      sections: AppConfigParser.parseSection(json, 'sections', SectionsConfig.fromJson),
+      welcomeTexts: AppConfigParser.parseSection(json, 'welcomeTexts', WelcomeTextsConfig.fromJson),
+      alerts: AppConfigParser.parseSection(json, 'alerts', AlertsConfig.fromJson),
+      emptyMessages: AppConfigParser.parseSection(json, 'emptyMessages', EmptyMessagesConfig.fromJson),
+      banners: AppConfigParser.parseSection(json, 'banners', BannersConfig.fromJson),
     );
   }
 }
 
+
 abstract final class AppConfigParser {
   static T parseSection<T>(
-    Map<String, dynamic> json,
-    String key,
-    T Function(Map<String, dynamic>) parser,
-  ) {
+      Map<String, dynamic> json,
+      String key,
+      T Function(Map<String, dynamic>) parser,
+      ) {
     final value = json[key];
 
     if (value == null) {
@@ -87,9 +56,7 @@ abstract final class AppConfigParser {
     }
 
     if (value is! Map<String, dynamic>) {
-      debugPrint(
-        '[AppConfig] Sección "$key" tiene un formato inválido en app_config.json',
-      );
+      debugPrint('[AppConfig] Sección "$key" tiene un formato inválido en app_config.json');
       throw ConfigSectionException(section: key);
     }
 

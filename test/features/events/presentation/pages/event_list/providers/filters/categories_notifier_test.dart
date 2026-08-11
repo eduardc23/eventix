@@ -1,9 +1,6 @@
 import 'dart:async';
 
-import 'package:eventix/core/config/app_config_provider.dart';
-import 'package:eventix/core/domain/failures/app_failure.dart';
 import 'package:eventix/core/domain/result/result.dart';
-import 'package:eventix/features/events/domain/entities/category_entity.dart';
 import 'package:eventix/features/events/di/events_di_providers.dart';
 import 'package:eventix/features/events/presentation/pages/event_list/providers/filters/categories_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,18 +9,14 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../../../helpers/fakes.dart';
 import '../../../../../../../helpers/mocks.dart';
 import '../../../../../../../helpers/riverpod_helpers.dart';
-import '../../../../../../../helpers/test_app_config.dart';
 import '../../../../../helpers/events_test_data.dart';
 
 void main() {
   late MockGetCategoriesUseCase mockUseCase;
   final tFailure = FakeAppFailure();
-  final tCategories = [EventsTestData.tCategoryEntity];
-  final tDefaultCategories = List<CategoryEntity>.unmodifiable(
-    testAppConfig.defaults.categories.map(
-      (category) => CategoryEntity(uid: category.uid, name: category.name),
-    ),
-  );
+  final tCategories = [
+    EventsTestData.tCategoryEntity,
+  ];
 
   setUp(() {
     mockUseCase = MockGetCategoriesUseCase();
@@ -31,99 +24,78 @@ void main() {
 
   group('CategoriesNotifier', () {
     test(
-      'Expone categorías locales y luego las reemplaza con las del backend',
+      'Obtiene y retorna la lista de categorías desde el caso de uso',
       () async {
-        final completer = Completer<Result<List<CategoryEntity>, AppFailure>>();
-        when(() => mockUseCase()).thenAnswer((_) => completer.future);
+        when(() => mockUseCase()).thenAnswer((_) async => Success(tCategories));
 
         final container = createContainer(
           overrides: [
-            appConfigProvider.overrideWithValue(testAppConfig),
             getCategoriesUseCaseProvider.overrideWithValue(mockUseCase),
           ],
         );
 
-        expect(
-          container.read(categoriesProvider).requireValue,
-          equals(tDefaultCategories),
-        );
+        final result = await container.read(categoriesProvider.future);
 
-        completer.complete(Success(tCategories));
-        await Future<void>.delayed(Duration.zero);
-
-        expect(
-          container.read(categoriesProvider).requireValue,
-          equals(tCategories),
-        );
+        expect(result, equals(tCategories));
         verify(() => mockUseCase()).called(1);
       },
     );
 
     test(
-      'Mantiene las categorías locales si la carga inicial remota falla',
+      'Refleja un estado de error cuando el caso de uso falla',
       () async {
-        final completer = Completer<Result<List<CategoryEntity>, AppFailure>>();
-        when(() => mockUseCase()).thenAnswer((_) => completer.future);
+        when(() => mockUseCase()).thenAnswer((_) async => Error(tFailure));
 
         final container = createContainer(
           overrides: [
-            appConfigProvider.overrideWithValue(testAppConfig),
             getCategoriesUseCaseProvider.overrideWithValue(mockUseCase),
           ],
         );
 
-        expect(
-          container.read(categoriesProvider).requireValue,
-          equals(tDefaultCategories),
-        );
+        final done = Completer<void>();
+        final sub = container.listen(categoriesProvider, (_, next) {
+          if (next.error != null && !done.isCompleted) {
+            done.complete();
+          }
+        });
 
-        completer.complete(Error(tFailure));
-        await Future<void>.delayed(Duration.zero);
+        await done.future;
 
         final state = container.read(categoriesProvider);
-        expect(state.requireValue, equals(tDefaultCategories));
+        expect(state.error, isNotNull);
+        expect(state.error, same(tFailure));
+
+        sub.close();
       },
     );
 
-    test('Recarga los datos al llamar a reload', () async {
-      when(() => mockUseCase()).thenAnswer((_) async => Success(tCategories));
+    test(
+      'Recarga los datos al llamar a reload',
+      () async {
+        when(() => mockUseCase()).thenAnswer((_) async => Success(tCategories));
 
-      final container = createContainer(
-        overrides: [
-          appConfigProvider.overrideWithValue(testAppConfig),
-          getCategoriesUseCaseProvider.overrideWithValue(mockUseCase),
-        ],
-      );
+        final container = createContainer(
+          overrides: [
+            getCategoriesUseCaseProvider.overrideWithValue(mockUseCase),
+          ],
+        );
 
-      final initialLoadDone = Completer<void>();
-      final sub = container.listen(categoriesProvider, (_, next) {
-        if (next.value == tCategories && !initialLoadDone.isCompleted) {
-          initialLoadDone.complete();
-        }
-      });
+        await container.read(categoriesProvider.future);
 
-      await initialLoadDone.future;
-      expect(
-        container.read(categoriesProvider).requireValue,
-        equals(tCategories),
-      );
+        final tNewCategories = [
+          EventsTestData.tCategoryEntity,
+          EventsTestData.tCategoryEntity.copyWith(uid: 'cat2', name: 'Other'),
+        ];
+        when(() => mockUseCase()).thenAnswer((_) async => Success(tNewCategories));
 
-      final tNewCategories = [
-        EventsTestData.tCategoryEntity,
-        EventsTestData.tCategoryEntity.copyWith(uid: 'cat2', name: 'Other'),
-      ];
-      when(
-        () => mockUseCase(),
-      ).thenAnswer((_) async => Success(tNewCategories));
+        await container.read(categoriesProvider.notifier).reload();
 
-      await container.read(categoriesProvider.notifier).reload();
-
-      expect(
-        container.read(categoriesProvider).requireValue,
-        equals(tNewCategories),
-      );
-      verify(() => mockUseCase()).called(2);
-      sub.close();
-    });
+        expect(
+          await container.read(categoriesProvider.future),
+          equals(tNewCategories),
+        );
+        verify(() => mockUseCase()).called(2);
+      },
+    );
   });
 }

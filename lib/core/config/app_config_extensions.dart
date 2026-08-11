@@ -5,7 +5,6 @@ import 'app_config_provider.dart';
 import 'models/alerts_config.dart';
 import 'models/app_info.dart';
 import 'models/banners_config.dart';
-import 'models/defaults_config.dart';
 import 'models/empty_messages_config.dart';
 import 'models/sections_config.dart';
 import 'models/ui_config.dart';
@@ -21,8 +20,5 @@ extension AppConfigX on WidgetRef {
   WelcomeTextsConfig get welcomeTexts => appConfig.welcomeTexts;
   AlertsConfig get alertsConfig => appConfig.alerts;
   EmptyMessagesConfig get emptyMessages => appConfig.emptyMessages;
-  DefaultsConfig get defaultsConfig => appConfig.defaults;
-  List<DefaultCategoryConfig> get defaultCategories =>
-      defaultsConfig.categories;
   BannersConfig get banners => appConfig.banners;
 }
