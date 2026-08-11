@@ -9,6 +9,11 @@ abstract final class AppConstants{
   static const String rateLimitError = 'Demasiadas solicitudes. Por favor, inténtalo más tarde.';
   static const String unexpectedError = 'Algo salió mal. Intenta de nuevo.';
 
+  // Errores de Configuración
+  static const String configError = 'Error de configuración.';
+  static const String configLoadError = 'Error al cargar la configuración de la aplicación.';
+  static String configSectionError(String section) => 'Falta o es inválida la sección "$section" en la configuración.';
+
   // Etiquetas Comunes
   static const String emailLabel = 'Correo electrónico';
   static const String passwordLabel = 'Contraseña';

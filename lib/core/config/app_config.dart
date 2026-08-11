@@ -30,6 +30,13 @@ class AppConfig {
       welcomeTexts: WelcomeTextsConfig.fromJson(json['welcomeTexts'] as Map<String, dynamic>),
       alerts: AlertsConfig.fromJson(json['alerts'] as Map<String, dynamic>),
       emptyMessages: EmptyMessagesConfig.fromJson(json['emptyMessages'] as Map<String, dynamic>),
+      app: AppConfigParser.parseSection(json, 'app', AppInfo.fromJson),
+      config: AppConfigParser.parseSection(json, 'config', GeneralConfig.fromJson),
+      sections: AppConfigParser.parseSection(json, 'sections', SectionsConfig.fromJson),
+      welcomeTexts: AppConfigParser.parseSection(json, 'welcomeTexts', WelcomeTextsConfig.fromJson),
+      alerts: AppConfigParser.parseSection(json, 'alerts', AlertsConfig.fromJson),
+      emptyMessages: AppConfigParser.parseSection(json, 'emptyMessages', EmptyMessagesConfig.fromJson),
     );
   }
 }
+abstract final class AppConfigParser {  static T parseSection<T>(      Map<String, dynamic> json,      String key,      T Function(Map<String, dynamic>) parser,      ) {    final value = json[key];    if (value == null) {      debugPrint('[AppConfig] Sección "$key" no encontrada en app_config.json');      throw ConfigSectionException(section: key);    }    if (value is! Map<String, dynamic>) {      debugPrint('[AppConfig] Sección "$key" tiene un formato inválido en app_config.json');      throw ConfigSectionException(section: key);    }    try {      return parser(value);    } catch (e) {      debugPrint('[AppConfig] Error al parsear la sección "$key": $e');      throw ConfigSectionException(section: key);    }  }}

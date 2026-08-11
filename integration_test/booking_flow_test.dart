@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventix/core/config/app_config_loader.dart';
 import 'package:eventix/core/config/app_config_provider.dart';
 import 'package:eventix/core/di/core_di_providers.dart';
+import 'package:eventix/core/domain/result/result.dart';
 import 'package:eventix/features/booking/presentation/constants/booking_test_keys.dart';
 import 'package:eventix/features/booking/presentation/pages/booking/booking_page.dart';
 import 'package:eventix/features/booking/presentation/pages/booking_list/booking_list_page.dart';
@@ -21,7 +22,13 @@ Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   await initializeIntegrationTestEnvironment();
-  final config = await AppConfigLoader.load();
+  final configResult = await AppConfigLoader.load();
+  final config = switch (configResult) {
+    Success(:final value) => value,
+    Error(:final error) => throw Exception(
+      'No se pudo cargar la configuración en tests: $error',
+    ),
+  };
 
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
