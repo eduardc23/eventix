@@ -47,6 +47,22 @@
       "description": "Explora eventos y reserva tu próxima experiencia."
     }
   },
+  "defaults": {
+    "categories": [
+      {
+        "uid": "cat-1",
+        "name": "Música"
+      },
+      {
+        "uid": "cat-2",
+        "name": "Deportes"
+      },
+      {
+        "uid": "cat-3",
+        "name": "Tecnología"
+      }
+    ]
+  },
   "banners": {
     "auth": {
       "invalidCredentials": "Correo o contraseña incorrectos. Intenta de nuevo.",
