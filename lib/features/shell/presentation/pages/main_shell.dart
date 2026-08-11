@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/config/app_config_extensions.dart';
 import '../../../../core/domain/failures/app_failure.dart';
 import '../../../auth/presentation/providers/sign_out_provider.dart';
-import '../constants/main_shell_strings.dart';
 import 'widgets/app_drawer.dart';
 
 class MainShell extends ConsumerWidget {
@@ -23,7 +22,7 @@ class MainShell extends ConsumerWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: AppText(
-                  MainShellStrings.signOutError,
+                  ref.banners.shell.signOutError,
                   variant: AppTextVariant.bodyMedium,
                 ),
               ),
@@ -35,6 +34,7 @@ class MainShell extends ConsumerWidget {
 
     return AppScaffold(
       drawer: AppDrawer(
+        header: ref.appInfo.name,
         onSignOut: () {
           ref.read(signOutProvider.notifier).signOut();
         },

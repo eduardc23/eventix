@@ -1,7 +1,6 @@
 import 'package:eventix/core/constants/app_constants.dart';
 import 'package:eventix/core/domain/failures/core_failures.dart';
 import 'package:eventix/features/booking/domain/failures/booking_failures.dart';
-import 'package:eventix/features/booking/presentation/constants/booking_strings.dart';
 import 'package:eventix/features/booking/presentation/extensions/booking_failure_message.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -56,7 +55,7 @@ void main() {
           final unknownFailure = FakeAppFailure();
           expect(
             unknownFailure.toBookingMessage(testAppConfig),
-            equals(BookingStrings.unexpectedBookingError),
+            equals(testAppConfig.banners.booking.unexpectedError),
           );
         },
       );

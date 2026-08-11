@@ -40,5 +40,4 @@ class BookingStrings {
   // Error Messages
   static const errorTitle = 'Error al cargar reservas';
   static const retryAction = 'Reintentar';
-  static const unexpectedBookingError = 'Ocurrió un error inesperado al procesar tu reserva.';
 }

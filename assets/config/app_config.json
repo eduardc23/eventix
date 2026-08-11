@@ -46,5 +46,19 @@
       "title": "Sin reservas aún",
       "description": "Explora eventos y reserva tu próxima experiencia."
     }
+  },
+  "banners": {
+    "auth": {
+      "invalidCredentials": "Correo o contraseña incorrectos. Intenta de nuevo.",
+      "emailAlreadyInUse": "Este correo ya está registrado.",
+      "tooManyRequests": "Demasiados intentos fallidos. Espera un momento.",
+      "unexpectedError": "Error inesperado durante la autenticación."
+    },
+    "booking": {
+      "unexpectedError": "Ocurrió un error inesperado al procesar tu reserva."
+    },
+    "shell": {
+      "signOutError": "Error al cerrar sesión"
+    }
   }
 }

@@ -1,5 +1,4 @@
 abstract final class AppConstants{
-  static const String appName = 'Eventix';
 
   // Errores Genéricos
   static const String networkError = 'Sin conexión. Verifica tu red e inténtalo de nuevo.';

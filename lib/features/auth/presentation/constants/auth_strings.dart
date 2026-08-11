@@ -27,10 +27,4 @@ class AuthStrings {
   static const String passwordMinLength = 'Mínimo 6 caracteres.';
   static const String confirmPasswordRequired = 'Confirma tu contraseña.';
   static const String passwordsDoNotMatch = 'Las contraseñas no coinciden.';
-
-  // Errores de Autenticación (Firebase/Backend)
-  static const String invalidAuthError = 'Correo o contraseña incorrectos. Intenta de nuevo.';
-  static const String emailAlreadyInUseError = 'Este correo ya está registrado.';
-  static const String tooManyRequestsError = 'Demasiados intentos fallidos. Espera un momento.';
-  static const String unexpectedAuthError = 'Error inesperado durante la autenticación.';
 }

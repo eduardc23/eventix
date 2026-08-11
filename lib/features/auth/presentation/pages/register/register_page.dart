@@ -25,7 +25,7 @@ class RegisterPage extends ConsumerWidget {
         subtitle: ref.welcomeTexts.register.subtitle,
       ),
       errorMessage: registerState.maybeWhen(
-        failure: (failure) => failure.toAuthMessage,
+        failure: (failure) => failure.toAuthMessage(ref.appConfig),
         orElse: () => null,
       ),
       form: RegisterForm(

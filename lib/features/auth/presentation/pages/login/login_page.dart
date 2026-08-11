@@ -26,7 +26,7 @@ class LoginPage extends ConsumerWidget {
         subtitle: ref.welcomeTexts.login.subtitle,
       ),
       errorMessage: loginState.maybeWhen(
-        failure: (failure) => failure.toAuthMessage,
+        failure: (failure) => failure.toAuthMessage(ref.appConfig),
         orElse: () => null,
       ),
       form: LoginForm(

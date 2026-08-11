@@ -74,7 +74,7 @@ void main() {
         overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
       );
 
-      expect(find.text(FakeAppFailure().toAuthMessage), findsNothing);
+      expect(find.text(FakeAppFailure().toAuthMessage(testAppConfig)), findsNothing);
     });
   });
 
@@ -131,7 +131,7 @@ void main() {
       await tester.pump(); // Loading
       await tester.pump(); // Error
 
-      expect(find.text(failure.toAuthMessage), findsOneWidget);
+      expect(find.text(failure.toAuthMessage(testAppConfig)), findsOneWidget);
       verify(() => mockSignUpUseCase(any())).called(1);
     });
   });
@@ -151,7 +151,7 @@ void main() {
           ),
         ],
       );
-      expect(find.text(firstFailure.toAuthMessage), findsOneWidget);
+      expect(find.text(firstFailure.toAuthMessage(testAppConfig)), findsOneWidget);
 
       await tester.pumpApp(
         const RegisterPage(),
@@ -163,8 +163,8 @@ void main() {
       );
       await tester.pump();
 
-      expect(find.text(secondFailure.toAuthMessage), findsOneWidget);
-      expect(find.text(firstFailure.toAuthMessage), findsNothing);
+      expect(find.text(secondFailure.toAuthMessage(testAppConfig)), findsOneWidget);
+      expect(find.text(firstFailure.toAuthMessage(testAppConfig)), findsNothing);
     });
   });
 }

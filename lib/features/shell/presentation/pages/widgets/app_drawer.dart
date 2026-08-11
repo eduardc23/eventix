@@ -1,12 +1,12 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_constants.dart';
 import '../../constants/main_shell_strings.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key, required this.onSignOut});
+  const AppDrawer({super.key, required this.onSignOut, required this.header});
 
+  final String header;
   final VoidCallback onSignOut;
 
   @override
@@ -14,12 +14,9 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             child: Center(
-              child: AppText(
-                AppConstants.appName,
-                variant: AppTextVariant.headlineSmall,
-              ),
+              child: AppText(header, variant: AppTextVariant.headlineSmall),
             ),
           ),
           const Spacer(),

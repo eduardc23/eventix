@@ -1,10 +1,10 @@
-import 'package:eventix/core/constants/app_constants.dart';
 import 'package:eventix/features/shell/presentation/constants/main_shell_strings.dart';
 import 'package:eventix/features/shell/presentation/pages/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../../helpers/pump_app.dart';
+import '../../../../../helpers/test_app_config.dart';
 
 void main() {
   group('AppDrawer - Renderizado', () {
@@ -13,28 +13,29 @@ void main() {
     ) async {
       await tester.pumpApp(
         Scaffold(
-          body: AppDrawer(onSignOut: () {}),
+          body: AppDrawer(onSignOut: () {}, header: testAppConfig.app.name),
         ),
       );
 
       expect(find.byType(Drawer), findsOneWidget);
       expect(find.byType(DrawerHeader), findsOneWidget);
-      expect(find.text(AppConstants.appName), findsOneWidget);
+      expect(find.text(testAppConfig.app.name), findsOneWidget);
     });
 
-    testWidgets('Visualiza la opción de cierre de sesión con su etiqueta e ícono', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpApp(
-        Scaffold(
-          body: AppDrawer(onSignOut: () {}),
-        ),
-      );
+    testWidgets(
+      'Visualiza la opción de cierre de sesión con su etiqueta e ícono',
+      (WidgetTester tester) async {
+        await tester.pumpApp(
+          Scaffold(
+            body: AppDrawer(onSignOut: () {}, header: testAppConfig.app.name),
+          ),
+        );
 
-      expect(find.byType(ListTile), findsOneWidget);
-      expect(find.text(MainShellStrings.signOutLabel), findsOneWidget);
-      expect(find.byIcon(Icons.logout), findsOneWidget);
-    });
+        expect(find.byType(ListTile), findsOneWidget);
+        expect(find.text(MainShellStrings.signOutLabel), findsOneWidget);
+        expect(find.byIcon(Icons.logout), findsOneWidget);
+      },
+    );
   });
 
   group('AppDrawer - Interacción', () {
@@ -47,6 +48,7 @@ void main() {
           Scaffold(
             body: AppDrawer(
               onSignOut: () => signOutCallCount++,
+              header: testAppConfig.app.name,
             ),
           ),
         );

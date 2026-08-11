@@ -141,7 +141,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text(MainShellStrings.signOutError), findsOneWidget);
+      expect(find.text(testAppConfig.banners.shell.signOutError), findsOneWidget);
     });
   });
 }

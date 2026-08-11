@@ -1,6 +1,7 @@
 import 'package:eventix/core/config/app_config.dart';
 import 'package:eventix/core/config/models/alerts_config.dart';
 import 'package:eventix/core/config/models/app_info.dart';
+import 'package:eventix/core/config/models/banners_config.dart';
 import 'package:eventix/core/config/models/empty_messages_config.dart';
 import 'package:eventix/core/config/models/general_config.dart';
 import 'package:eventix/core/config/models/sections_config.dart';
@@ -37,5 +38,19 @@ final testAppConfig = AppConfig(
   emptyMessages: EmptyMessagesConfig(
     events: EmptyMessageDetailConfig(title: 'No Events', description: 'No events found'),
     bookings: EmptyMessageDetailConfig(title: 'No Bookings', description: 'No bookings found'),
+  ),
+  banners: BannersConfig(
+    auth: AuthBannersConfig(
+      invalidCredentials: 'Invalid credentials',
+      emailAlreadyInUse: 'Email already in use',
+      tooManyRequests: 'Too many requests',
+      unexpectedError: 'Unexpected auth error',
+    ),
+    booking: BookingBannersConfig(
+      unexpectedError: 'Unexpected booking error',
+    ),
+    shell: ShellBannersConfig(
+      signOutError: 'Sign out error',
+    ),
   ),
 );
