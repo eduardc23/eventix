@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'core/config/app_config_loader.dart';
 import 'core/config/app_config_provider.dart';
+import 'core/constants/app_locale.dart';
 import 'core/domain/failures/config_failures.dart';
 import 'core/domain/result/result.dart';
 import 'core/presentation/pages/config_error_page.dart';
@@ -41,10 +42,8 @@ class MyApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      locale: const Locale('es', 'CO'),
-      supportedLocales: const [
-        Locale('es', 'CO'),
-      ],
+      locale: AppLocale.locale,
+      supportedLocales: const [AppLocale.locale],
       showSemanticsDebugger: false,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,

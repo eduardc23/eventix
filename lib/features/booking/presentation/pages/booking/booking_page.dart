@@ -129,6 +129,9 @@ class BookingPage extends ConsumerWidget {
                       notifier.createBooking(event);
                     },
               isLoading: bookingState.isLoading,
+              loadingSemanticsLabel: event.isFree
+                  ? BookingStrings.processingBooking
+                  : BookingStrings.processingTransaction,
             ),
           ],
         ),

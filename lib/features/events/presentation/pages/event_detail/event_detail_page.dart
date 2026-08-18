@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/presentation/extensions/price_extensions.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../domain/entities/event_entity.dart';
 import '../../extensions/event_ui_extensions.dart';
@@ -37,8 +38,7 @@ class EventDetailPage extends StatelessWidget {
                   ),
                   AppSpacing.xl.vGap,
                   EventDetailInfoCards(
-                    formattedDate: event.formattedDate,
-                    formattedTime: event.formattedTime,
+                    date: event.date,
                     cityName: event.cityName,
                   ),
                   AppSpacing.xl.vGap,
@@ -57,8 +57,8 @@ class EventDetailPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: EventDetailBottomBar(
-        priceLabel: event.formattedPrice,
-        semanticPrice: event.semanticPrice,
+        priceLabel: event.price.toFormattedPrice(),
+        semanticPrice: event.price.toSemanticPrice(),
         action: event.bookingAction,
         onPressed: event.isBookable
             ? () {

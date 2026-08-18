@@ -1,10 +1,9 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
-import 'package:eventix/core/constants/app_constants.dart';
 import 'package:eventix/core/presentation/extensions/date_time_extensions.dart';
 import 'package:eventix/core/presentation/extensions/price_extensions.dart';
 
 import '../../domain/entities/booking_entity.dart';
-import '../constants/booking_strings.dart';
+import 'booking_int_extensions.dart';
 
 extension BookingEntityUIX on BookingEntity {
   /// Mapea una entidad de reserva al modelo de datos de la UI.
@@ -13,9 +12,9 @@ extension BookingEntityUIX on BookingEntity {
     title: eventTitle,
     dateLabel: eventDate.toEventDate(),
     dateSemanticLabel: eventDate.toEventDateSemantic(),
-    ticketsLabel: BookingStrings.ticketsCountVisualLabel(tickets),
-    ticketsSemanticLabel: BookingStrings.ticketsCountLabel(tickets),
-    priceLabel: AppConstants.formatPrice(totalPrice),
+    ticketsLabel: tickets.toTicketsLabel(),
+    ticketsSemanticLabel: tickets.toTicketsSemanticLabel(),
+    priceLabel: totalPrice.toFormattedPrice(),
     priceSemanticLabel: totalPrice.toSemanticPrice(),
   );
 }

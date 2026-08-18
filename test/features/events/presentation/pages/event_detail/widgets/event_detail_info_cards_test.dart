@@ -9,16 +9,16 @@ void main() {
     testWidgets('muestra la fecha, la hora y la ciudad', (
       WidgetTester tester,
     ) async {
+      final testDate = DateTime(2026, 7, 12, 20); // 12 de julio de 2026, 20:00
       await tester.pumpApp(
-        const EventDetailInfoCards(
-          formattedDate: '12 Jul 2026',
-          formattedTime: '20:00',
+        EventDetailInfoCards(
+          date: testDate,
           cityName: 'Madrid',
         ),
       );
 
-      expect(find.text('12 Jul 2026'), findsOneWidget);
-      expect(find.text('20:00'), findsOneWidget);
+      expect(find.text('dom 12 jul'), findsOneWidget);
+      expect(find.text('20:00 h'), findsOneWidget);
       expect(find.text('Madrid'), findsOneWidget);
     });
 
@@ -26,9 +26,8 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpApp(
-        const EventDetailInfoCards(
-          formattedDate: '12 Jul 2026',
-          formattedTime: '20:00',
+        EventDetailInfoCards(
+          date: DateTime(2026, 7, 12, 20),
           cityName: 'Madrid',
         ),
       );

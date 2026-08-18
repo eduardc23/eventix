@@ -1,5 +1,4 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
-import 'package:eventix/core/constants/app_constants.dart';
 import 'package:eventix/core/presentation/extensions/price_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../constants/booking_strings.dart';

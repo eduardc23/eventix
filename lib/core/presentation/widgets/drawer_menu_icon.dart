@@ -1,8 +1,8 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/app_constants.dart';
 import '../../../features/shell/presentation/pages/main_shell.dart';
+import '../../constants/app_constants.dart';
 
 class DrawerMenuIcon extends StatelessWidget {
   const DrawerMenuIcon({super.key});

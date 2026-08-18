@@ -1,20 +1,19 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/presentation/extensions/date_time_extensions.dart';
 import '../../../constants/events_strings.dart';
 import 'info_tile.dart';
 
 class EventDetailInfoCards extends StatelessWidget {
-  final String formattedDate;
-  final String formattedTime;
-  final String cityName;
-
   const EventDetailInfoCards({
     super.key,
-    required this.formattedDate,
-    required this.formattedTime,
+    required this.date,
     required this.cityName,
   });
+
+  final DateTime date;
+  final String cityName;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +21,9 @@ class EventDetailInfoCards extends StatelessWidget {
       children: [
         InfoTile(
           icon: Icons.calendar_today_outlined,
-          title: formattedDate,
-          subtitle: formattedTime,
-          semanticLabel: EventsStrings.dateTimeSemanticLabel(
-            formattedDate,
-            formattedTime,
-          ),
+          title: date.toEventDatePart(),
+          subtitle: date.toEventTimePart(),
+          semanticLabel: date.toEventDateSemantic(),
         ),
         AppSpacing.md.hGap,
         InfoTile(

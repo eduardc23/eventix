@@ -24,7 +24,7 @@ class EventListItem extends StatelessWidget {
         venueName: event.cityName,
         dateLabel: event.date.toEventDate(),
         dateSemanticLabel: event.date.toEventDateSemantic(),
-        priceLabel: AppConstants.formatPrice(event.price),
+        priceLabel: event.price.toFormattedPrice(),
         priceSemanticLabel: event.price.toSemanticPrice(),
       ),
       onTap: () => context.push(AppRoutes.eventDetail, extra: event),

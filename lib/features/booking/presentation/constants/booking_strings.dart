@@ -1,3 +1,5 @@
+import '../extensions/booking_int_extensions.dart';
+
 class BookingStrings {
   BookingStrings._();
 
@@ -12,10 +14,7 @@ class BookingStrings {
 
   static String inDaysLabel(int days) => 'En $days días';
 
-  static String ticketsCountVisualLabel(int count) => switch (count) {
-        1 => '1 entrada',
-        _ => '$count entradas',
-      };
+  static String ticketsCountVisualLabel(int count) => count.toTicketsLabel();
 
   // Loading State
   static const processingTransaction = 'Procesando transacción';
@@ -47,18 +46,10 @@ class BookingStrings {
   static const retryAction = 'Reintentar';
 
   // Accessibility
-  static String ticketsCountLabel(int count) => switch (count) {
-        1 => 'una entrada',
-        _ => '$count entradas',
-      };
-
-  static String _bookingCountLabel(int count) => switch (count) {
-        1 => 'una reserva',
-        _ => '$count reservas',
-      };
+  static String ticketsCountLabel(int count) => count.toTicketsSemanticLabel();
 
   static String sectionHeaderSemanticLabel(String label, int count) =>
-      '$label, ${_bookingCountLabel(count)}';
+      '$label, ${count.toBookingsSemanticLabel()}';
 
   static String orderSummarySemanticLabel({
     required String title,
@@ -67,7 +58,7 @@ class BookingStrings {
   }) {
     return '$orderSummaryTitle. '
         '$title, '
-        '${ticketsCountLabel(quantity)}, '
+        '${quantity.toTicketsSemanticLabel()}, '
         '$totalToPay: $formattedPrice';
   }
 

@@ -49,9 +49,6 @@ class EventsStrings {
 
   static String totalPriceSemanticLabel(String price) => '$totalPrice: $price';
 
-  static String dateTimeSemanticLabel(String date, String time) =>
-      'Fecha: $date a las $time';
-
   static String locationSemanticLabel(String city) => 'Ubicación: $city';
 
   static String capacitySemanticLabel(int spots) =>
