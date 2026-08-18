@@ -5,10 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventix/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 /// Inicializa el entorno para las pruebas de integración (App uikit y Firebase).
 Future<void> initializeIntegrationTestEnvironment() async {
-  await AppKit.initialize();
+  await initializeDateFormatting();
+  AppKit.initialize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 

@@ -21,6 +21,7 @@ class AuthHeader extends StatelessWidget {
           title ,
           variant: AppTextVariant.displayMedium,
           color: context.colorScheme.primary,
+          isSemanticHeader: true,
         ),
         AppSpacing.xs.vGap,
         AppText(

@@ -22,6 +22,7 @@ class QuantitySelector extends StatelessWidget {
         const AppText(
           BookingStrings.quantityTitle,
           variant: AppTextVariant.titleMedium,
+          isSemanticHeader: true,
         ),
         AppSpacing.xs.vGap,
         const AppText(
@@ -33,18 +34,25 @@ class QuantitySelector extends StatelessWidget {
           children: [
             _QuantityButton(
               icon: Icons.remove,
+              semanticLabel: BookingStrings.decreaseQuantitySemanticLabel,
               onPressed: quantity > 1 ? () => onChanged(quantity - 1) : null,
             ),
             AppSpacing.md.hGap,
-            AppText(
-              quantity.toString(),
-              variant: AppTextVariant.titleLarge,
+            Semantics(
+              label: BookingStrings.quantitySemanticLabel(quantity),
+              excludeSemantics: true,
+              child: AppText(
+                quantity.toString(),
+                variant: AppTextVariant.titleLarge,
+              ),
             ),
             AppSpacing.md.hGap,
             _QuantityButton(
               icon: Icons.add,
-              onPressed:
-                  quantity < maxQuantity ? () => onChanged(quantity + 1) : null,
+              semanticLabel: BookingStrings.increaseQuantitySemanticLabel,
+              onPressed: quantity < maxQuantity
+                  ? () => onChanged(quantity + 1)
+                  : null,
             ),
           ],
         ),
@@ -54,21 +62,23 @@ class QuantitySelector extends StatelessWidget {
 }
 
 class _QuantityButton extends StatelessWidget {
-  const _QuantityButton({required this.icon, this.onPressed});
+  const _QuantityButton({
+    required this.icon,
+    required this.semanticLabel,
+    this.onPressed,
+  });
 
   final IconData icon;
-  final VoidCallback? onPressed;
+  final String semanticLabel;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton.filledTonal(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      style: IconButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-        ),
-      ),
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      excludeSemantics: true,
+      child: AppIcon(icon, onPressed: onPressed),
     );
   }
 }

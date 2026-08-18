@@ -1,6 +1,8 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../constants/booking_strings.dart';
+
 class BookingSectionHeader extends StatelessWidget {
   const BookingSectionHeader({
     required this.label,
@@ -22,39 +24,43 @@ class BookingSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        AppSpacing.xl,
-        AppSpacing.lg,
-        AppSpacing.xl,
-        AppSpacing.xs,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: AppSpacing.xxs,
-            height: AppSpacing.lg,
-            decoration: BoxDecoration(
-              color: isActive ? colorScheme.primary : colorScheme.outline,
-              borderRadius: BorderRadius.circular(AppRadius.xs),
+    return Semantics(
+      label: BookingStrings.sectionHeaderSemanticLabel(label, count),
+      excludeSemantics: true,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          AppSpacing.lg,
+          AppSpacing.xl,
+          AppSpacing.xs,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: AppSpacing.xxs,
+              height: AppSpacing.lg,
+              decoration: BoxDecoration(
+                color: isActive ? colorScheme.primary : colorScheme.outline,
+                borderRadius: BorderRadius.circular(AppRadius.xs),
+              ),
             ),
-          ),
-          AppSpacing.sm.hGap,
+            AppSpacing.sm.hGap,
 
-          AppText(label, variant: AppTextVariant.titleMedium),
-          AppSpacing.xs.hGap,
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.xs,
-              vertical: AppSpacing.xxxs,
+            AppText(label, variant: AppTextVariant.titleMedium),
+            AppSpacing.xs.hGap,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xs,
+                vertical: AppSpacing.xxxs,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadius.full),
+              ),
+              child: AppText('$count', variant: AppTextVariant.labelSmall),
             ),
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(AppRadius.full),
-            ),
-            child: AppText('$count', variant: AppTextVariant.labelSmall),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

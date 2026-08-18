@@ -24,12 +24,17 @@ class EventDetailInfoCards extends StatelessWidget {
           icon: Icons.calendar_today_outlined,
           title: formattedDate,
           subtitle: formattedTime,
+          semanticLabel: EventsStrings.dateTimeSemanticLabel(
+            formattedDate,
+            formattedTime,
+          ),
         ),
         AppSpacing.md.hGap,
         InfoTile(
           icon: Icons.location_on_outlined,
           title: cityName,
           subtitle: EventsStrings.location,
+          semanticLabel: EventsStrings.locationSemanticLabel(cityName),
         ),
       ],
     );

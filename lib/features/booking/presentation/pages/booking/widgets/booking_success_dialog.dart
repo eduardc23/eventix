@@ -32,10 +32,11 @@ class BookingSuccessDialog extends ConsumerWidget {
         ref.appConfig.alerts.bookingSuccess.title,
         variant: AppTextVariant.headlineSmall,
         textAlign: TextAlign.center,
+        isSemanticHeader: true,
       ),
       content: AppText(
         isFree
-            ?  ref.appConfig.alerts.bookingSuccess.message
+            ? ref.appConfig.alerts.bookingSuccess.message
             : ref.appConfig.alerts.paymentProcessed,
         variant: AppTextVariant.bodyMedium,
         textAlign: TextAlign.center,

@@ -65,7 +65,11 @@ class _FilterGroup extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(title, variant: AppTextVariant.labelLarge),
+        AppText(
+          title,
+          variant: AppTextVariant.labelLarge,
+          isSemanticHeader: true,
+        ),
         AppSpacing.xs.vGap,
         child,
         AppSpacing.lg.vGap,

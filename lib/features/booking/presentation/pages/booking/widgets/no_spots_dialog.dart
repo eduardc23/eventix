@@ -23,6 +23,7 @@ class NoSpotsDialog extends ConsumerWidget {
         config.title,
         variant: AppTextVariant.headlineSmall,
         textAlign: TextAlign.center,
+        isSemanticHeader: true,
       ),
       content: AppText(
         config.message,

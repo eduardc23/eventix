@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../../core/presentation/extensions/async_value_extensions.dart';
+import '../../../../constants/events_strings.dart';
 import '../../providers/list/events_notifier.dart';
 import 'widgets/event_list.dart';
 import 'widgets/event_list_empty.dart';
@@ -16,7 +17,10 @@ class EventListBody extends ConsumerWidget {
     final state = ref.watch(eventsProvider);
 
     return state.when(
-      loading: () => const Center(child: AppLoader.medium()),
+      loading: () =>
+      const Center(
+        child: AppLoader.medium(semanticsLabel: EventsStrings.loadingEvents),
+      ),
       skipLoadingOnReload: false,
       data: (events) {
         if (events.isEmpty) {

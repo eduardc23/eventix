@@ -7,12 +7,14 @@ import '../../../enums/event_booking_action_enum.dart';
 
 class EventDetailBottomBar extends StatelessWidget {
   final String priceLabel;
+  final String semanticPrice;
   final EventBookingAction action;
   final VoidCallback? onPressed;
 
   const EventDetailBottomBar({
     super.key,
     required this.priceLabel,
+    required this.semanticPrice,
     required this.action,
     required this.onPressed,
   });
@@ -36,16 +38,20 @@ class EventDetailBottomBar extends StatelessWidget {
           padding: AppSpacing.md.all,
           child: Row(
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const AppText(
-                    EventsStrings.totalPrice,
-                    variant: AppTextVariant.bodySmall,
-                  ),
-                  AppText(priceLabel, variant: AppTextVariant.titleLarge),
-                ],
+              Semantics(
+                label: EventsStrings.totalPriceSemanticLabel(semanticPrice),
+                excludeSemantics: true,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const AppText(
+                      EventsStrings.totalPrice,
+                      variant: AppTextVariant.bodySmall,
+                    ),
+                    AppText(priceLabel, variant: AppTextVariant.titleLarge),
+                  ],
+                ),
               ),
               AppSpacing.xl.hGap,
               Expanded(

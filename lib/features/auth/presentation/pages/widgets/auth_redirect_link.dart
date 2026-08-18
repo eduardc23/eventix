@@ -11,7 +11,7 @@ class AuthRedirectLink extends StatelessWidget {
 
   final String text;
   final String linkText;
-  final VoidCallback onTap;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,12 @@ class AuthRedirectLink extends StatelessWidget {
           variant: AppTextVariant.bodyMedium,
           color: context.colorScheme.onSurfaceVariant,
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: AppText(
-            linkText,
-            variant: AppTextVariant.titleSmall,
-            color: context.colorScheme.primary,
-          ),
+        AppTextButton(
+          label: linkText,
+          onPressed: onTap,
+          variant: AppTextVariant.titleSmall,
+          color: context.colorScheme.primary,
+          padding: EdgeInsets.all(AppSpacing.none),
         ),
       ],
     );

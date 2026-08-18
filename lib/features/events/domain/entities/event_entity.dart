@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/domain/extensions/price_value_extension.dart';
 import '../enums/event_status_enum.dart';
 
 part 'event_entity.freezed.dart';
@@ -24,7 +25,7 @@ abstract class EventEntity with _$EventEntity {
     required DateTime createdAt,
   }) = _EventEntity;
 
-  bool get isFree => price == 0;
+  bool get isFree => price.isFreePrice;
 
   bool get hasSpots => availableSpots > 0;
 

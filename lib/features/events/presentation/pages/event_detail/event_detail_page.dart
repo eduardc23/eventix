@@ -58,6 +58,7 @@ class EventDetailPage extends StatelessWidget {
       ),
       bottomNavigationBar: EventDetailBottomBar(
         priceLabel: event.formattedPrice,
+        semanticPrice: event.semanticPrice,
         action: event.bookingAction,
         onPressed: event.isBookable
             ? () {

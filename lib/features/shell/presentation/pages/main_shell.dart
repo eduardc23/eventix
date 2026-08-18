@@ -13,6 +13,8 @@ class MainShell extends ConsumerWidget {
 
   final StatefulNavigationShell navigationShell;
 
+  static final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(signOutProvider, (previous, next) {
@@ -33,6 +35,7 @@ class MainShell extends ConsumerWidget {
     });
 
     return AppScaffold(
+      scaffoldKey: scaffoldKey,
       drawer: AppDrawer(
         header: ref.appInfo.name,
         onSignOut: () {

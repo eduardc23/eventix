@@ -38,7 +38,7 @@ class AsyncFilterSection<T> extends StatelessWidget {
       loading: () => const Padding(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
         child: Center(
-          child: AppLoader.medium(),
+          child: AppLoader.medium(semanticsLabel: EventsStrings.loadingFilters),
         ),
       ),
       error: (error, stack) => AppEmptyState(

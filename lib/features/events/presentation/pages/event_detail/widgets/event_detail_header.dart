@@ -16,13 +16,15 @@ class EventDetailHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppChip.filter(
+        AppChip.display(
           label: categoryName,
-          selected: false,
-          onSelected: (_) {},
         ),
         AppSpacing.xs.vGap,
-        AppText(title, variant: AppTextVariant.headlineMedium),
+        AppText(
+          title,
+          variant: AppTextVariant.headlineMedium,
+          isSemanticHeader: true,
+        ),
       ],
     );
   }

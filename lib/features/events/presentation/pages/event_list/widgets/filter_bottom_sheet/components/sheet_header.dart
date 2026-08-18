@@ -18,6 +18,7 @@ class SheetHeader extends ConsumerWidget {
           child: AppText(
             ref.sectionsConfig.filters,
             variant: AppTextVariant.titleMedium,
+            isSemanticHeader: true,
           ),
         ),
         Align(

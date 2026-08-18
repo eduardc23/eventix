@@ -2,6 +2,7 @@ import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/event_entity.dart';
+import '../../../constants/events_strings.dart';
 
 class EventDetailAppBar extends StatelessWidget {
   final EventEntity event;
@@ -15,7 +16,11 @@ class EventDetailAppBar extends StatelessWidget {
       pinned: true,
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: AppImage.network(event.imageUrl, fit: BoxFit.cover),
+        background: AppImage.network(
+          event.imageUrl,
+          fit: BoxFit.cover,
+          semanticLabel: EventsStrings.eventImageSemanticLabel(event.title),
+        ),
       ),
     );
   }

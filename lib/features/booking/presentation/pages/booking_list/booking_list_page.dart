@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/config/app_config_extensions.dart';
+import '../../../../../core/presentation/widgets/drawer_menu_icon.dart';
 import 'widgets/booking_list_body.dart';
 
 class BookingListPage extends ConsumerWidget {
@@ -12,7 +13,7 @@ class BookingListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppScaffold(
       appBar: AppTopBar(
-        onMenuPressed: () => Scaffold.of(context).openDrawer(),
+        leading: DrawerMenuIcon(),
         title: ref.sectionsConfig.myBookings,
       ),
       body: const BookingListBody(),

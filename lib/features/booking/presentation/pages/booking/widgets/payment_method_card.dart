@@ -15,27 +15,32 @@ class PaymentMethodCard extends StatelessWidget {
           variant: AppTextVariant.titleMedium,
         ),
         AppSpacing.sm.vGap,
-        AppCard(
-          elevation: AppElevation.none,
-          color: context.colorScheme.primaryContainer.withValues(alpha: 0.3),
-          padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          child: ListTile(
-            leading: AppIcon(
-              Icons.credit_card,
-              color: context.colorScheme.primary,
-            ),
-            title: const AppText(
-              BookingStrings.mockCreditCard,
-              variant: AppTextVariant.labelLarge,
-            ),
-            subtitle: const AppText(
-              BookingStrings.mockCardNumber,
-              variant: AppTextVariant.bodySmall,
-            ),
-            trailing: AppIcon(
-              Icons.check_circle,
-              color: context.colorScheme.primary,
+        Semantics(
+          label: BookingStrings.paymentMethodSemanticLabel,
+          button: false,
+          excludeSemantics: true,
+          child: AppCard(
+            elevation: AppElevation.none,
+            color: context.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            padding: EdgeInsets.zero,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            child: ListTile(
+              leading: AppIcon(
+                Icons.credit_card,
+                color: context.colorScheme.primary,
+              ),
+              title: const AppText(
+                BookingStrings.mockCreditCard,
+                variant: AppTextVariant.labelLarge,
+              ),
+              subtitle: const AppText(
+                BookingStrings.mockCardNumber,
+                variant: AppTextVariant.bodySmall,
+              ),
+              trailing: AppIcon(
+                Icons.check_circle,
+                color: context.colorScheme.primary,
+              ),
             ),
           ),
         ),

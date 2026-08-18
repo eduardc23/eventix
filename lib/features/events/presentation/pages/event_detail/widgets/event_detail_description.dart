@@ -16,6 +16,7 @@ class EventDetailDescription extends StatelessWidget {
         const AppText(
           EventsStrings.aboutEvent,
           variant: AppTextVariant.headlineSmall,
+          isSemanticHeader: true,
         ),
         AppSpacing.sm.vGap,
         AppText(description, variant: AppTextVariant.bodyLarge),

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../core/presentation/extensions/async_value_extensions.dart';
 import '../../../constants/booking_strings.dart';
 import '../../../extensions/booking_failure_message.dart';
+import '../../../extensions/booking_ui_extensions.dart';
 import '../../../extensions/date_time_extensions.dart';
 import '../providers/booking_list_provider.dart';
 import 'booking_list_empty_state.dart';
@@ -21,7 +22,9 @@ class BookingListBody extends ConsumerWidget {
     final bookingsAsync = ref.watch(bookingListProvider);
 
     return bookingsAsync.when(
-      loading: () => const Center(child: AppLoader.medium()),
+      loading: () => const Center(
+        child: AppLoader.medium(semanticsLabel: BookingStrings.loadingBookings),
+      ),
       error: (error, stack) => BookingListError(
         error: error.asFailure.toBookingMessage(ref.appConfig),
       ),
@@ -33,47 +36,35 @@ class BookingListBody extends ConsumerWidget {
         final upcoming = ref.watch(upcomingBookingsProvider);
         final past = ref.watch(pastBookingsProvider);
 
-        return RefreshIndicator(
-          onRefresh: () => ref.read(bookingListProvider.notifier).refresh(),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BookingSection(
-                  title: BookingStrings.upcomingSection,
-                  bookings: upcoming,
-                  isActive: true,
-                  itemBuilder: (booking) => BookingCard(
-                    data: BookingCardData(
-                      imageUrl: booking.eventImageUrl,
-                      title: booking.eventTitle,
-                      date: booking.eventDate,
-                      tickets: booking.tickets,
-                      totalPrice: booking.totalPrice,
-                    ),
-                    timeLabel: booking.eventDate.bookingTimeLabel,
-                  ),
-                ),
-                BookingSection(
-                  title: BookingStrings.pastSection,
-                  bookings: past,
-                  isActive: false,
-                  itemBuilder: (booking) => PastBookingCard(
-                    data: BookingCardData(
-                      imageUrl: booking.eventImageUrl,
-                      title: booking.eventTitle,
-                      date: booking.eventDate,
-                      tickets: booking.tickets,
-                      totalPrice: booking.totalPrice,
-                    ),
-                    ticketsLabel: BookingStrings.ticketsCountLabel(
-                      booking.tickets,
+        return Semantics(
+          label: BookingStrings.bookingListSemanticLabel,
+          container: true,
+          child: RefreshIndicator(
+            onRefresh: () => ref.read(bookingListProvider.notifier).refresh(),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BookingSection(
+                    title: BookingStrings.upcomingSection,
+                    bookings: upcoming,
+                    isActive: true,
+                    itemBuilder: (booking) => BookingCard(
+                      data: booking.toCardData,
+                      timeLabel: booking.eventDate.bookingTimeLabel,
                     ),
                   ),
-                ),
-                AppSpacing.xxl.vGap,
-              ],
+                  BookingSection(
+                    title: BookingStrings.pastSection,
+                    bookings: past,
+                    isActive: false,
+                    itemBuilder: (booking) =>
+                        PastBookingCard(data: booking.toCardData),
+                  ),
+                  AppSpacing.xxl.vGap,
+                ],
+              ),
             ),
           ),
         );

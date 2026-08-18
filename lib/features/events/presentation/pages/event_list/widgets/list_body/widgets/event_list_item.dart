@@ -1,4 +1,7 @@
 import 'package:app_ui_kit/app_ui_kit.dart';
+import 'package:eventix/core/constants/app_constants.dart';
+import 'package:eventix/core/presentation/extensions/date_time_extensions.dart';
+import 'package:eventix/core/presentation/extensions/price_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,9 +22,10 @@ class EventListItem extends StatelessWidget {
         imageUrl: event.imageUrl,
         name: event.title,
         venueName: event.cityName,
-        date: event.date,
-        price: event.price.toInt().toString(),
-        isFree: event.isFree,
+        dateLabel: event.date.toEventDate(),
+        dateSemanticLabel: event.date.toEventDateSemantic(),
+        priceLabel: AppConstants.formatPrice(event.price),
+        priceSemanticLabel: event.price.toSemanticPrice(),
       ),
       onTap: () => context.push(AppRoutes.eventDetail, extra: event),
     );

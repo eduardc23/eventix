@@ -16,7 +16,11 @@ class AppDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             child: Center(
-              child: AppText(header, variant: AppTextVariant.headlineSmall),
+              child: AppText(
+                header,
+                variant: AppTextVariant.headlineSmall,
+                isSemanticHeader: true,
+              ),
             ),
           ),
           const Spacer(),
