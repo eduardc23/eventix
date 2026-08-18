@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../../helpers/accessibility_helper.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
 import '../../../helpers/events_test_data.dart';
@@ -102,5 +103,29 @@ void main() {
         expect(bottomBarWidget.onPressed, isNull);
       },
     );
+  });
+
+  testWidgets('EventDetailPage cumple guías de accesibilidad', (tester) async {
+    final event = EventsTestData.makeEventEntity();
+    await tester.pumpApp(
+      InheritedGoRouter(
+        goRouter: mockGoRouter,
+        child: EventDetailPage(event: event),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
+  });
+
+  testWidgets('EventDetailPage cumple guías de accesibilidad cuando está agotado', (tester) async {
+    final event = EventsTestData.makeEventEntity(availableSpots: 0);
+    await tester.pumpApp(
+      InheritedGoRouter(
+        goRouter: mockGoRouter,
+        child: EventDetailPage(event: event),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
   });
 }

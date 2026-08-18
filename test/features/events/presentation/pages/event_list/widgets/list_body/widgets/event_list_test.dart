@@ -15,7 +15,6 @@ void main() {
   group('EventList', () {
     testWidgets('renderiza una lista de eventos', (tester) async {
       await tester.pumpApp(
-        setupIntl: true,
         Scaffold(
           body: EventList(events: events),
         ),
@@ -29,7 +28,6 @@ void main() {
 
     testWidgets('tiene scroll habilitado incluso si hay pocos elementos (physics)', (tester) async {
       await tester.pumpApp(
-        setupIntl: true,
         Scaffold(
           body: EventList(events: events),
         ),

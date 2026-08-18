@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../../helpers/accessibility_helper.dart';
 import '../../../../../helpers/fakes.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
@@ -166,5 +167,26 @@ void main() {
       expect(find.text(secondFailure.toAuthMessage(testAppConfig)), findsOneWidget);
       expect(find.text(firstFailure.toAuthMessage(testAppConfig)), findsNothing);
     });
+  });
+
+  testWidgets('RegisterPage cumple guías de accesibilidad', (tester) async {
+    await tester.pumpApp(
+      const RegisterPage(),
+      overrides: [signUpUseCaseProvider.overrideWithValue(mockSignUpUseCase)],
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
+  });
+
+  testWidgets('RegisterPage cumple guías de accesibilidad en estado de error', (tester) async {
+    final failure = AuthFailure.emailAlreadyInUse();
+    await tester.pumpApp(
+      const RegisterPage(),
+      overrides: [
+        registerProvider.overrideWithValue(RegisterState.failure(failure: failure)),
+      ],
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
   });
 }

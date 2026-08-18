@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../../helpers/accessibility_helper.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
 import '../../../../../helpers/test_app_config.dart';
@@ -116,5 +117,37 @@ void main() {
 
       expect(find.text('Booking failed'), findsOneWidget);
     });
+  });
+
+  testWidgets('BookingPage cumple guías de accesibilidad', (tester) async {
+    await tester.pumpApp(
+      BookingPage(event: testEvent),
+      overrides: [
+        currentUserIdProvider.overrideWithValue('user-123'),
+        createBookingUseCaseProvider.overrideWithValue(mockUseCase),
+      ],
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
+  });
+
+  testWidgets('BookingPage cumple guías de accesibilidad en estado de error', (tester) async {
+    final failure = CoreFailure.server(message: 'Booking failed');
+    when(() => mockUseCase(any())).thenAnswer((_) async => Error(failure));
+
+    await tester.pumpApp(
+      BookingPage(event: testEvent),
+      overrides: [
+        currentUserIdProvider.overrideWithValue('user-123'),
+        createBookingUseCaseProvider.overrideWithValue(mockUseCase),
+      ],
+    );
+
+    await tester.ensureVisible(find.text(BookingStrings.payNow));
+    await tester.pump();
+    await tester.tap(find.text(BookingStrings.payNow));
+    await tester.pumpAndSettle();
+
+    await tester.checkAccessibility();
   });
 }

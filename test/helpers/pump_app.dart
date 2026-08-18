@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'test_app_config.dart';
 
@@ -15,14 +16,10 @@ extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     List<Override> overrides = const [],
-    bool setupIntl = false,
     bool wrapWithMaterialApp = true,
     AppConfig? appConfig,
   }) async {
-    if (setupIntl) {
-      await AppKit.initialize();
-    }
-
+    await initializeDateFormatting();
     return pumpWidget(
       ProviderScope(
         overrides: [

@@ -10,11 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../../../../helpers/accessibility_helper.dart';
 import '../../../../../../../helpers/fakes.dart';
 import '../../../../../../../helpers/mocks.dart';
 import '../../../../../../../helpers/pump_app.dart';
 import '../../../../../helpers/events_test_data.dart';
-
 
 void main() {
   late MockGetEventsUseCase mockGetEventsUseCase;
@@ -29,9 +29,9 @@ void main() {
 
   group('EventListBody', () {
     testWidgets('muestra un loader cuando está cargando', (tester) async {
-      when(() => mockGetEventsUseCase(any())).thenAnswer(
-        (_) async => const Success([]),
-      );
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => const Success([]));
 
       await tester.pumpApp(
         const Scaffold(body: EventListBody()),
@@ -45,10 +45,12 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('muestra EventListEmpty si la lista está vacía', (tester) async {
-      when(() => mockGetEventsUseCase(any())).thenAnswer(
-        (_) async => const Success([]),
-      );
+    testWidgets('muestra EventListEmpty si la lista está vacía', (
+      tester,
+    ) async {
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => const Success([]));
 
       await tester.pumpApp(
         const Scaffold(body: EventListBody()),
@@ -64,12 +66,11 @@ void main() {
 
     testWidgets('muestra EventList si hay eventos', (tester) async {
       final events = [EventsTestData.makeEventEntity()];
-      when(() => mockGetEventsUseCase(any())).thenAnswer(
-        (_) async => Success(events),
-      );
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => Success(events));
 
       await tester.pumpApp(
-        setupIntl: true,
         const Scaffold(body: EventListBody()),
         overrides: [
           getEventsUseCaseProvider.overrideWithValue(mockGetEventsUseCase),
@@ -82,9 +83,9 @@ void main() {
     });
 
     testWidgets('muestra EventListError si hay una falla', (tester) async {
-      when(() => mockGetEventsUseCase(any())).thenAnswer(
-        (_) async => Error(FakeAppFailure()),
-      );
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => Error(FakeAppFailure()));
 
       await tester.pumpApp(
         const Scaffold(body: EventListBody()),
@@ -96,6 +97,60 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(EventListError), findsOneWidget);
+    });
+
+    testWidgets('EventListBody cumple guías de accesibilidad', (
+      WidgetTester tester,
+    ) async {
+      final events = [EventsTestData.makeEventEntity()];
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => Success(events));
+      await tester.pumpApp(
+        const Scaffold(body: EventListBody()),
+        overrides: [
+          getEventsUseCaseProvider.overrideWithValue(mockGetEventsUseCase),
+        ],
+      );
+      await tester.pumpAndSettle();
+
+      await tester.checkAccessibility();
+    });
+
+    testWidgets('EventListBody cumple guías de accesibilidad en estado vacío', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => const Success([]));
+
+      await tester.pumpApp(
+        const Scaffold(body: EventListBody()),
+        overrides: [
+          getEventsUseCaseProvider.overrideWithValue(mockGetEventsUseCase),
+        ],
+      );
+      await tester.pumpAndSettle();
+
+      await tester.checkAccessibility();
+    });
+
+    testWidgets('EventListBody cumple guías de accesibilidad en estado de error', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockGetEventsUseCase(any()),
+      ).thenAnswer((_) async => Error(FakeAppFailure()));
+
+      await tester.pumpApp(
+        const Scaffold(body: EventListBody()),
+        overrides: [
+          getEventsUseCaseProvider.overrideWithValue(mockGetEventsUseCase),
+        ],
+      );
+      await tester.pumpAndSettle();
+
+      await tester.checkAccessibility();
     });
   });
 }

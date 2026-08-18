@@ -16,7 +16,7 @@ void main() {
               InfoTile(
                 icon: Icons.calendar_today_outlined,
                 title: '12 Jul 2026',
-                subtitle: '20:00',
+                subtitle: '20:00', semanticLabel: '',
               ),
             ],
           ),
@@ -35,7 +35,7 @@ void main() {
               InfoTile(
                 icon: Icons.location_on_outlined,
                 title: 'Madrid',
-                subtitle: 'Ubicación',
+                subtitle: 'Ubicación', semanticLabel: '',
               ),
             ],
           ),

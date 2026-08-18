@@ -1,3 +1,4 @@
+import 'package:eventix/core/constants/app_constants.dart';
 import 'package:eventix/features/events/domain/enums/event_status_enum.dart';
 import 'package:eventix/features/events/presentation/constants/events_strings.dart';
 import 'package:eventix/features/events/presentation/enums/event_booking_action_enum.dart';
@@ -35,7 +36,7 @@ void main() {
   group('EventEntityUIX - Formato de Precio', () {
     test('Texto de "gratis" cuando el precio es 0', () {
       final event = EventsTestData.makeEventEntity(price: 0);
-      expect(event.formattedPrice, EventsStrings.free);
+      expect(event.formattedPrice, AppConstants.freeLabel);
     });
 
     test('Precio formateado con el símbolo \$ cuando tiene costo', () {

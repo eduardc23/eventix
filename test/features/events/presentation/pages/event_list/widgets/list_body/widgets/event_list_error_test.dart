@@ -6,6 +6,7 @@ import 'package:eventix/features/events/presentation/pages/event_list/widgets/li
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../../../../helpers/accessibility_helper.dart';
 import '../../../../../../../../helpers/pump_app.dart';
 
 void main() {
@@ -28,6 +29,12 @@ void main() {
       await tester.pumpApp(Scaffold(body: EventListError(failure: failure)));
 
       expect(find.byIcon(Icons.wifi_off_outlined), findsOneWidget);
+    });
+
+    testWidgets('EventListError cumple guías de accesibilidad', (tester) async {
+      await tester.pumpApp(Scaffold(body: EventListError(failure: failure)));
+      await tester.pumpAndSettle();
+      await tester.checkAccessibility();
     });
   });
 }

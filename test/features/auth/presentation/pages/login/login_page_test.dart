@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../../helpers/accessibility_helper.dart';
 import '../../../../../helpers/fakes.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
@@ -35,20 +36,19 @@ void main() {
     testWidgets('El subtítulo de login es visible', (tester) async {
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
-      expect(find.text(testAppConfig.welcomeTexts.login.subtitle), findsOneWidget);
+      expect(
+        find.text(testAppConfig.welcomeTexts.login.subtitle),
+        findsOneWidget,
+      );
     });
 
     testWidgets('LoginForm es visible', (tester) async {
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
       expect(find.byType(LoginForm), findsOneWidget);
@@ -57,21 +57,19 @@ void main() {
     testWidgets('El texto de registro y el link son visibles', (tester) async {
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
       expect(find.text(AuthStrings.noAccountText), findsOneWidget);
       expect(find.text(AuthStrings.registerLink), findsOneWidget);
     });
 
-    testWidgets('No se muestra ningún mensaje de error al inicio', (tester) async {
+    testWidgets('No se muestra ningún mensaje de error al inicio', (
+      tester,
+    ) async {
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
       expect(
@@ -82,7 +80,9 @@ void main() {
   });
 
   group('LoginPage - Comportamiento (Patrón de Booking)', () {
-    testWidgets('Muestra el estado de carga al intentar iniciar sesión', (tester) async {
+    testWidgets('Muestra el estado de carga al intentar iniciar sesión', (
+      tester,
+    ) async {
       final completer = Completer<Result<void, AppFailure>>();
       addTearDown(() {
         if (!completer.isCompleted) {
@@ -91,15 +91,11 @@ void main() {
       });
 
       // Mock que no completa inmediatamente para poder capturar el estado de carga
-      when(() => mockSignInUseCase(any())).thenAnswer(
-            (_) => completer.future,
-      );
+      when(() => mockSignInUseCase(any())).thenAnswer((_) => completer.future);
 
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
       await tester.enterText(find.byType(TextField).at(0), 'test@test.com');
@@ -111,15 +107,17 @@ void main() {
       expect(form.isLoading, isTrue);
     });
 
-    testWidgets('Muestra mensaje de error cuando el login falla', (tester) async {
+    testWidgets('Muestra mensaje de error cuando el login falla', (
+      tester,
+    ) async {
       final failure = FakeAppFailure();
-      when(() => mockSignInUseCase(any())).thenAnswer((_) async => Error(failure));
+      when(
+        () => mockSignInUseCase(any()),
+      ).thenAnswer((_) async => Error(failure));
 
       await tester.pumpApp(
         const LoginPage(),
-        overrides: [
-          signInUseCaseProvider.overrideWithValue(mockSignInUseCase),
-        ],
+        overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
       );
 
       await tester.enterText(find.byType(TextField).at(0), 'test@test.com');
@@ -135,28 +133,66 @@ void main() {
   });
 
   group('LoginPage - Estado Manual (Para testeo rápido de UI)', () {
-    testWidgets('El mensaje se actualiza cuando el error cambia', (tester) async {
+    testWidgets('El mensaje se actualiza cuando el error cambia', (
+      tester,
+    ) async {
       final firstFailure = FakeAppFailure();
       final secondFailure = AuthFailure.invalidCredentials();
 
       await tester.pumpApp(
         const LoginPage(),
         overrides: [
-          loginProvider.overrideWithValue(LoginState.failure(failure: firstFailure)),
+          loginProvider.overrideWithValue(
+            LoginState.failure(failure: firstFailure),
+          ),
         ],
       );
-      expect(find.text(firstFailure.toAuthMessage(testAppConfig)), findsOneWidget);
+      expect(
+        find.text(firstFailure.toAuthMessage(testAppConfig)),
+        findsOneWidget,
+      );
 
       await tester.pumpApp(
         const LoginPage(),
         overrides: [
-          loginProvider.overrideWithValue(LoginState.failure(failure: secondFailure)),
+          loginProvider.overrideWithValue(
+            LoginState.failure(failure: secondFailure),
+          ),
         ],
       );
       await tester.pump();
 
-      expect(find.text(secondFailure.toAuthMessage(testAppConfig)), findsOneWidget);
-      expect(find.text(firstFailure.toAuthMessage(testAppConfig)), findsNothing);
+      expect(
+        find.text(secondFailure.toAuthMessage(testAppConfig)),
+        findsOneWidget,
+      );
+      expect(
+        find.text(firstFailure.toAuthMessage(testAppConfig)),
+        findsNothing,
+      );
     });
+  });
+
+  testWidgets('LoginPage cumple guías de accesibilidad', (tester) async {
+    await tester.pumpApp(
+      const LoginPage(),
+      overrides: [signInUseCaseProvider.overrideWithValue(mockSignInUseCase)],
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
+  });
+
+  testWidgets('LoginPage cumple guías de accesibilidad en estado de error', (
+    tester,
+  ) async {
+    final failure = AuthFailure.invalidCredentials();
+    await tester.pumpApp(
+      const LoginPage(),
+      overrides: [
+        loginProvider.overrideWithValue(LoginState.failure(failure: failure)),
+      ],
+    );
+    await tester.pumpAndSettle();
+    await tester.checkAccessibility();
   });
 }

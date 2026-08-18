@@ -15,7 +15,7 @@ void main() {
         const EventDetailBottomBar(
           priceLabel: 'Gratis',
           action: EventBookingAction.bookNow,
-          onPressed: null,
+          onPressed: null, semanticPrice: '',
         ),
       );
 
@@ -30,7 +30,7 @@ void main() {
         const EventDetailBottomBar(
           priceLabel: '\$25000',
           action: EventBookingAction.payNow,
-          onPressed: null,
+          onPressed: null, semanticPrice: '',
         ),
       );
 
@@ -49,7 +49,7 @@ void main() {
         EventDetailBottomBar(
           priceLabel: '\$20000',
           action: EventBookingAction.bookNow,
-          onPressed: () => pressed = true,
+          onPressed: () => pressed = true, semanticPrice: '',
         ),
       );
 
