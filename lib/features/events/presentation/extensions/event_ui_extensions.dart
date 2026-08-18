@@ -1,3 +1,6 @@
+import 'package:eventix/core/constants/app_constants.dart';
+
+import '../../../../core/presentation/extensions/price_extensions.dart';
 import '../../domain/entities/event_entity.dart';
 import '../constants/events_strings.dart';
 import '../enums/event_booking_action_enum.dart';
@@ -11,8 +14,9 @@ extension EventEntityUIX on EventEntity {
     return EventBookingAction.payNow;
   }
 
-  String get formattedPrice =>
-      isFree ? EventsStrings.free : '\$${price.toString()}';
+  String get formattedPrice => price.toFormattedPrice();
+
+  String get semanticPrice => price.toSemanticPrice();
 
   String get formattedDate => '${date.day}/${date.month}/${date.year}';
 

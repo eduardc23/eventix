@@ -100,7 +100,6 @@ class BookingPage extends ConsumerWidget {
             OrderSummaryCard(
               imageUrl: event.imageUrl,
               title: event.title,
-              isFree: event.isFree,
               totalPrice: totalPrice,
               quantity: quantity,
             ),
