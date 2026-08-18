@@ -112,6 +112,7 @@ class _RegisterFormState extends State<RegisterForm> {
             key: AuthTestKeys.registerButton,
             label: AuthStrings.registerButton,
             isLoading: widget.isLoading,
+            loadingSemanticsLabel: AuthStrings.loadingRegister,
             onPressed: widget.isLoading ? null : _handleSubmit,
           ),
         ],

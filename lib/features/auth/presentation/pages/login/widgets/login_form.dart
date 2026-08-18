@@ -72,6 +72,7 @@ class _LoginFormState extends State<LoginForm> {
             key: AuthTestKeys.loginButton,
             label: AuthStrings.loginButton,
             isLoading: widget.isLoading,
+            loadingSemanticsLabel: AuthStrings.loadingLogin,
             onPressed: _handleSubmit,
           ),
         ],

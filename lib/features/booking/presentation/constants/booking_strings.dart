@@ -18,8 +18,9 @@ class BookingStrings {
       };
 
   // Loading State
-  static const processingTransaction = 'Procesando transacción...';
+  static const processingTransaction = 'Procesando transacción';
   static const loadingBookings = 'Cargando reservas';
+  static const processingBooking = 'Procesando reserva';
 
   // Order Summary
   static const orderSummaryTitle = 'Resumen del pedido';

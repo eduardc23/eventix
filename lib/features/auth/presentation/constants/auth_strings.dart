@@ -27,4 +27,8 @@ class AuthStrings {
   static const String passwordMinLength = 'Mínimo 6 caracteres.';
   static const String confirmPasswordRequired = 'Confirma tu contraseña.';
   static const String passwordsDoNotMatch = 'Las contraseñas no coinciden.';
+
+  // Accesibilidad
+  static const String loadingLogin = 'Iniciando sesión';
+  static const String loadingRegister = 'Creando cuenta';
 }
