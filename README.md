@@ -21,6 +21,7 @@ El proyecto está construido con una arquitectura limpia, organizada por feature
 - [Dependency Injection](#dependency-injection)
 - [Testing](#testing)
 - [Data Flow](#data-flow)
+- [Accesibilidad](#accesibilidad)
 - [Installation](#installation)
 - [Licencia y Autor](#licencia-y-autor)
 
@@ -340,7 +341,7 @@ Viven bajo `test/` y validan lógica y UI de forma aislada.
 
 **Helpers compartidos:**
 
-- `PumpApp`: extensión de `WidgetTester` para montar widgets con `ProviderScope` y `MaterialApp` de forma homogénea. Centraliza overrides por test, tema del proyecto e inicialización opcional de internacionalización con `setupIntl`.
+- `PumpApp`: extensión de `WidgetTester` para montar widgets con `ProviderScope` y `MaterialApp` de forma homogénea. Centraliza overrides por test y tema del proyecto.
 - `RiverpodHelpers`: creación de `ProviderContainer` de test con teardown automático.
 - `Fakes`: fakes compartidos de infraestructura y de fallos de dominio.
 - `Mocks`: barrel de mocks comunes, con submódulos por feature (`AuthMocks`, `EventsMocks`, `BookingMocks`).
@@ -471,6 +472,138 @@ flowchart LR
 4. El repository consulta un datasource.
 5. El datasource lee datos desde Firestore.
 6. Los modelos se transforman en entidades y regresan a la UI.
+
+## Accesibilidad
+
+La aplicación implementa soporte para lectores de pantalla (TalkBack en Android, VoiceOver en iOS),
+con etiquetas semánticas descriptivas y navegación estructural por encabezados.
+
+### Estrategias de implementación
+
+#### 1. Transformación de datos para lectura natural
+
+Se definen extensiones en la capa de presentación para convertir valores técnicos o abreviados
+en lenguaje natural antes de pasarlos a los componentes del design system.
+
+- **Fechas semánticas** — `AppDateTimeX.toEventDateSemantic` expande una fecha que
+  visualmente aparece como *"Sáb 20 Sep · 20:00 h"* al formato *"sábado 20 de septiembre
+  a las 20:00"*, eliminando la ambigüedad de las abreviaturas.
+
+```dart
+// Visual
+extension AppDateTimeX on DateTime {
+  String toEventDate({String locale = AppLocale.code}) { ... }         // "Sáb 20 Sep · 20:00 h"
+  String toEventDateSemantic({String locale = AppLocale.code}) { ... } // "sábado 20 de septiembre a las 20:00"
+}
+```
+
+- **Precios con contexto** — `PriceExtensions.toSemanticPrice` usa `NumberFormat.currency`
+  para convertir un valor numérico en una descripción completa (*"10.000 pesos"*)
+  o anuncia *"Gratis"* cuando el precio es cero.
+
+```dart
+extension PriceExtensions on num {
+  String toFormattedPrice({String freeLabel = AppConstants.freeLabel}) { ... }
+  String toSemanticPrice({String locale = AppLocale.code}) { ... } // "10.000 pesos"
+}
+```
+
+- **Pluralización** — Los anuncios de cantidades usan lógica de pluralización para evitar
+  frases incorrectas como *"1 entradas"*:
+
+```dart
+static String ticketsCountLabel(int count) => switch (count) {
+  1 => 'una entrada',
+  _ => '$count entradas',
+};
+```
+
+#### 2. Patrón de composición semántica
+
+Se usa **`Semantics` + `excludeSemantics: true`** para
+componentes visuales complejos. Con `excludeSemantics: true`
+se oculta la complejidad interna y se provee una
+etiqueta única y bien estructurada.
+
+Ejemplos:
+
+- **`EventCard`** — Agrupa nombre, lugar, fecha y precio en un único anuncio fluido.
+- **`BookingSectionHeader`** — En lugar de leer *"Próximas"* y luego *"5"* por separado,
+  anuncia: *"Próximas, 5 reservas"*.
+- **`OrderSummaryCard`** — Resume el pedido en una sola sentencia:
+  *"Resumen del pedido. Concierto Rock, 2 entradas, Total a pagar: 10.000 pesos"*.
+
+#### 3. Estados de carga
+
+Todos los `AppLoader` reciben un `semanticsLabel` descriptivo según el contexto
+(*"Cargando eventos"*, *"Procesando transacción"*), informando al usuario sobre
+el estado actual sin necesidad de mover el foco.
+
+#### 4. Navegación estructural
+
+- **Encabezados semánticos** — Los títulos de sección usan `isSemanticHeader: true`
+  en `AppText`, permitiendo a los usuarios navegar rápidamente saltando entre encabezados.
+- **Acciones explícitas** — Los elementos interactivos tienen etiquetas de acción claras;
+  por ejemplo, el ícono de filtros se anuncia como *"Filtrar eventos"* y los botones
+  de cantidad como *"Aumentar cantidad"* y *"Disminuir cantidad"*.
+
+
+#### 5. Pruebas automatizadas de accesibilidad
+
+Se incluye una suite de widget tests dedicada a validar que cada pantalla cumpla
+con los estándares WCAG, cubriendo no solo el flujo principal sino también los
+estados vacíos y de error.
+
+Las validaciones están centralizadas en una extensión sobre `WidgetTester`:
+
+```dart
+extension AccessibilityHelper on WidgetTester {
+  Future<void> checkAccessibility() async {
+    await expectLater(this, meetsGuideline(textContrastGuideline));
+    await expectLater(this, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(this, meetsGuideline(iOSTapTargetGuideline));
+    await expectLater(this, meetsGuideline(labeledTapTargetGuideline));
+  }
+}
+```
+
+Esto valida en cada pantalla:
+
+- Contraste de texto — ratio mínimo 4.5:1 para texto normal, 3:1 para texto grande (WCAG AA).
+- Tamaño de tap targets — mínimo 48×48 dp en Android y 44×44 pt en iOS.
+- Etiquetas semánticas — todos los elementos interactivos deben tener un label accesible.
+
+Cada test usa `pumpAndSettle()` para evaluar el estado visual final, incluyendo
+animaciones de entrada y transiciones de estado.
+
+**Ejemplo de implementación (`EventListBody`):**
+
+```dart
+testWidgets('EventListBody cumple guías de accesibilidad', (tester) async {
+  final events = [EventsTestData.makeEventEntity()];
+  when(() => mockUseCase(any())).thenAnswer((_) async => Success(events));
+
+  await tester.pumpApp(const Scaffold(body: EventListBody()), overrides: [...]);
+  await tester.pumpAndSettle();
+  await tester.checkAccessibility();
+});
+
+testWidgets('EventListBody cumple guías de accesibilidad en estado vacío', (tester) async {
+  when(() => mockUseCase(any())).thenAnswer((_) async => const Success([]));
+
+  await tester.pumpApp(const Scaffold(body: EventListBody()), overrides: [...]);
+  await tester.pumpAndSettle();
+  await tester.checkAccessibility();
+});
+
+testWidgets('EventListBody cumple guías de accesibilidad en estado de error', (tester) async {
+  when(() => mockUseCase(any())).thenAnswer((_) async => Error(FakeAppFailure()));
+
+  await tester.pumpApp(const Scaffold(body: EventListBody()), overrides: [...]);
+  await tester.pumpAndSettle();
+  await tester.checkAccessibility();
+});
+```
 
 ## Installation
 
