@@ -17,6 +17,7 @@ El proyecto está construido con una arquitectura limpia, organizada por feature
 - [Configuración de la App](#configuración-de-la-app)
 - [Navigation](#navigation)
 - [Firebase Integration](#firebase-integration)
+- [Flavors](#flavors)
 - [Error Handling](#error-handling)
 - [Dependency Injection](#dependency-injection)
 - [Testing](#testing)
@@ -275,6 +276,149 @@ La integración con Firebase se concentra en el arranque de la app y en los data
 - `categories`
 - `cities`
 - `bookings`
+
+## Flavors
+
+El proyecto cuenta con dos entornos configurados: **`dev`** y **`prod`**, cada uno conectado a su propio proyecto de Firebase y con su propio identificador de aplicación.
+
+---
+
+### Proyectos Firebase
+
+| Entorno | Bundle ID / App ID |
+|---------|--------------------|
+| `dev`   | `com.example.eventix.dev` |
+| `prod`  | `com.example.eventix` |
+
+Gracias al sufijo `.dev` ambas apps pueden coexistir instaladas en el mismo dispositivo simultáneamente.
+
+---
+
+### Estructura de archivos
+
+```
+lib/
+├── main_dev.dart              # Punto de entrada para desarrollo
+├── main_prod.dart             # Punto de entrada para producción
+├── main_common.dart           # Lógica de inicialización compartida
+├── firebase_options_dev.dart  # Opciones de Firebase para dev
+└── firebase_options_prod.dart # Opciones de Firebase para prod
+
+android/app/src/
+├── dev/google-services.json
+└── prod/google-services.json
+
+ios/flavors/
+├── dev/GoogleService-Info.plist
+└── prod/GoogleService-Info.plist
+```
+
+Cada `main_*.dart` importa las `FirebaseOptions` de su entorno y las pasa a `mainCommon()`, que se encarga de la inicialización completa de la app.
+
+---
+
+### Identificar el entorno en tiempo de ejecución
+
+El flavor activo está disponible mediante `appFlavor` del paquete `flutter/services.dart`. Las constantes están centralizadas en la clase `Flavor`:
+
+```dart
+abstract final class Flavor {
+  static const dev = 'dev';
+  static const prod = 'prod';
+}
+```
+
+Ejemplo de uso:
+
+```dart
+if (appFlavor == Flavor.dev) {
+  // lógica exclusiva de desarrollo
+}
+```
+
+En el entorno `dev`, la app muestra un banner rojo en la esquina superior izquierda con la etiqueta **DEV** para distinguirla visualmente de producción.
+
+---
+
+### Cómo ejecutar
+
+#### VS Code
+
+Agrega o verifica el siguiente contenido en `.vscode/launch.json`:
+
+```json
+{
+  "configurations": [
+    {
+      "name": "dev",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main_dev.dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "prod",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main_prod.dart",
+      "args": ["--flavor", "prod"]
+    }
+  ]
+}
+```
+
+Luego selecciona la configuración deseada desde el panel **Run and Debug** y presiona Start Debugging
+
+#### Android Studio
+
+1. Abre **Run > Edit Configurations…**
+2. Crea o edita una configuración de tipo **Flutter**
+3. Configura según el entorno:
+
+| Campo | dev | prod |
+|-------|-----|------|
+| **Dart entrypoint** | `lib/main_dev.dart` | `lib/main_prod.dart` |
+| **Build flavor** | `dev` | `prod` |
+
+> El flavor también puede especificarse en **Additional run args** como `--flavor dev` / `--flavor prod`. Ambas opciones son equivalentes, el campo **Build flavor** es la forma más directa.
+
+4. Guarda y selecciona la configuración desde el selector de la barra superior antes de correr.
+
+#### CLI
+
+```bash
+# Desarrollo
+flutter run --flavor dev -t lib/main_dev.dart
+
+# Producción
+flutter run --flavor prod -t lib/main_prod.dart
+```
+
+---
+
+### Agregar un nuevo entorno
+
+Si en el futuro se requiere incorporar un entorno adicional (por ejemplo, `staging` o `uat`), los pasos generales son:
+
+1. Crear el proyecto en la consola de Firebase y obtener su ID.
+2. Agregar el nuevo flavor en Android (`build.gradle`) e iOS (nuevo scheme en Xcode), siguiendo la misma estructura que `dev` y `prod`.
+3. Generar los archivos de configuración de Firebase con `flutterfire`:
+
+```bash
+flutterfire configure \
+  --project=<firebase-project-id> \
+  --out=lib/firebase_options_staging.dart \
+  --ios-bundle-id=com.example.eventix.staging \
+  --ios-out=ios/flavors/staging/GoogleService-Info.plist \
+  --android-package-name=com.example.eventix.staging \
+  --android-out=android/app/src/staging/google-services.json
+```
+
+4. Crear `main_staging.dart` importando `firebase_options_staging.dart` y pasando las opciones a `mainCommon()`.
+5. Agregar la constante correspondiente en la clase `Flavor` y la configuración de ejecución en VS Code / Android Studio.
+
 
 ## Error Handling
 

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1002730437200",
-    "project_id": "eventix-8cb23",
-    "storage_bucket": "eventix-8cb23.firebasestorage.app"
+    "project_number": "464937430873",
+    "project_id": "eventix---prod",
+    "storage_bucket": "eventix---prod.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1002730437200:android:b0fe1588e7107918ffaf55",
+        "mobilesdk_app_id": "1:464937430873:android:818089dc7cdaffed216648",
         "android_client_info": {
           "package_name": "com.example.eventix"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAFsWRf6Rjfu5nlV22YytvgsvFwis_YjvU"
+          "current_key": "AIzaSyDjNldc-x_QyJZ7rAVX1W4BSot4nwjystk"
         }
       ],
       "services": {

@@ -9,7 +9,7 @@ import 'package:eventix/features/booking/presentation/pages/booking_list/booking
 import 'package:eventix/features/events/presentation/constants/events_test_keys.dart';
 import 'package:eventix/features/events/presentation/pages/event_detail/event_detail_page.dart';
 import 'package:eventix/features/events/presentation/pages/event_list/event_list_page.dart';
-import 'package:eventix/main.dart';
+import 'package:eventix/main_common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,7 +79,7 @@ Future<void> main() async {
           currentUserIdProvider.overrideWithValue(userId),
           appConfigProvider.overrideWithValue(config),
         ],
-        child: const MyApp(),
+        child: const EventixApp(),
       ),
     );
     await tester.pumpAndSettle();

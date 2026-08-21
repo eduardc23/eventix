@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventix/features/auth/presentation/pages/login/login_page.dart';
 import 'package:eventix/features/events/presentation/pages/event_list/event_list_page.dart';
 import 'package:eventix/features/shell/presentation/constants/main_shell_strings.dart';
-import 'package:eventix/main.dart';
+import 'package:eventix/main_common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +45,7 @@ Future<void> main() async {
   testWidgets('cierra la sesión desde el home y redirige al login', (
     tester,
   ) async {
-    await tester.pumpWidget(const ProviderScope(child: MyApp()));
+    await tester.pumpWidget(const ProviderScope(child: EventixApp()));
     await tester.pumpAndSettle(const Duration(seconds: 2));
 
     expect(find.byType(EventListPage), findsOneWidget);

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventix/features/auth/presentation/constants/auth_test_keys.dart';
 import 'package:eventix/features/auth/presentation/pages/login/login_page.dart';
 import 'package:eventix/features/events/presentation/pages/event_list/event_list_page.dart';
-import 'package:eventix/main.dart';
+import 'package:eventix/main_common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,7 +47,7 @@ Future<void> main() async {
   testWidgets('Redirige al listado de eventos tras iniciar sesión', (
     tester,
   ) async {
-    await tester.pumpWidget(const ProviderScope(child: MyApp()));
+    await tester.pumpWidget(const ProviderScope(child: EventixApp()));
     await tester.pumpAndSettle(const Duration(seconds: 2));
 
     expect(find.byType(LoginPage), findsOneWidget);

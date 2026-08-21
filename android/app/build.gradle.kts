@@ -35,6 +35,22 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    buildFeatures {
+        resValues = true
+    }
+
+    flavorDimensions += "default"
+
+    productFlavors {
+        create("prod") {
+            resValue("string", "app_name", "Eventix")
+        }
+        create("dev") {
+            resValue("string", "app_name", "Eventix dev")
+            applicationIdSuffix = ".dev"
+        }
+    }
 }
 
 kotlin {

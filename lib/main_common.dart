@@ -10,37 +10,37 @@ import 'core/constants/app_locale.dart';
 import 'core/domain/failures/config_failures.dart';
 import 'core/domain/result/result.dart';
 import 'core/presentation/pages/config_error_page.dart';
+import 'core/presentation/widgets/environment_banner.dart';
 import 'core/router/app_router.dart';
-import 'firebase_options.dart';
 
-void main() async {
+Future<void> mainCommon(FirebaseOptions firebaseOptions) async {
   WidgetsFlutterBinding.ensureInitialized();
   AppKit.initialize();
   await initializeDateFormatting();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: firebaseOptions);
   final result = await AppConfigLoader.load();
 
   switch (result) {
     case Success(:final value):
       runApp(
         ProviderScope(
-          overrides: [appConfigProvider.overrideWithValue(value)],
-          child: const MyApp(),
+          overrides: [
+            appConfigProvider.overrideWithValue(value),
+          ],
+          child: const EventixApp(),
         ),
       );
-
     case Error(:final error):
       runApp(ConfigErrorApp(failure: error));
   }
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class EventixApp extends ConsumerWidget {
+  const EventixApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-
     return MaterialApp.router(
       locale: AppLocale.locale,
       supportedLocales: const [AppLocale.locale],
@@ -50,6 +50,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       routerConfig: router,
+      builder: (context, child) => EnvironmentBanner(child: child!),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

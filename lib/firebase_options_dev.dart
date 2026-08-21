@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'firebase_options_dev.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAFsWRf6Rjfu5nlV22YytvgsvFwis_YjvU',
-    appId: '1:1002730437200:android:b0fe1588e7107918ffaf55',
+    appId: '1:1002730437200:android:b90a912831b476a3ffaf55',
     messagingSenderId: '1002730437200',
     projectId: 'eventix-8cb23',
     storageBucket: 'eventix-8cb23.firebasestorage.app',
@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDgfGKk3a5ZfdWJOlwrMSNhjPMpSkue5hI',
-    appId: '1:1002730437200:ios:f2ab107bea796c4dffaf55',
+    appId: '1:1002730437200:ios:fb5af931273e3733ffaf55',
     messagingSenderId: '1002730437200',
     projectId: 'eventix-8cb23',
     storageBucket: 'eventix-8cb23.firebasestorage.app',
-    iosBundleId: 'com.example.eventix',
+    iosBundleId: 'com.example.eventix.dev',
   );
 }

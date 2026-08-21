@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_ui_kit/app_ui_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eventix/firebase_options.dart';
+import 'package:eventix/firebase_options_dev.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
